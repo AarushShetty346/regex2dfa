@@ -24,6 +24,8 @@ export interface Stepper {
   prev: () => void;
   showAll: () => void;
   reset: () => void;
+  /** Reveal exactly `n` steps (clamped to 0..total). */
+  goTo: (n: number) => void;
 }
 
 export function useStepper(total: number, resetKey?: unknown, startRevealed = false): Stepper {
@@ -39,6 +41,7 @@ export function useStepper(total: number, resetKey?: unknown, startRevealed = fa
   const prev = useCallback(() => setShown((s) => Math.max(s - 1, 0)), []);
   const showAll = useCallback(() => setShown(total), [total]);
   const reset = useCallback(() => setShown(0), []);
+  const goTo = useCallback((n: number) => setShown(Math.max(0, Math.min(n, total))), [total]);
 
   const clamped = Math.min(shown, total);
   return {
@@ -51,5 +54,6 @@ export function useStepper(total: number, resetKey?: unknown, startRevealed = fa
     prev,
     showAll,
     reset,
+    goTo,
   };
 }
