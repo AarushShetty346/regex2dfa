@@ -2,89 +2,12 @@
  * Global styles.
  *
  * Design read: an interactive study tool for compiler-design students, in a precise
- * "lab instrument" language. Cool neutral greys, one burnt-orange accent, Geist + Geist Mono.
- * Light and dark are both first-class; tokens are redefined per theme below.
+ * "lab instrument" language. Dark only: cool near-black greys, one orange accent,
+ * Geist + Geist Mono.
  *
  * Shape rule: panels and canvases 14px, controls 9px, chips and the scrubber are pills.
  */
 :root {
-  --bg: #f1f2f3;
-  --surface: #fbfbfc;
-  --surface-2: #e9ebee;
-  --text: #17181b;
-  --muted: #5b5f68;
-  --faint: #8a8e97;
-  --border: #dadde2;
-  --border-strong: #c3c7ce;
-  --accent: #c2410c;
-  --accent-strong: #a8360a;
-  --accent-ink: #fffaf6;
-  --accent-soft: rgb(194 65 12 / 0.1);
-  --accent-line: rgb(194 65 12 / 0.38);
-  --ok: #15803d;
-  --ok-soft: rgb(21 128 61 / 0.12);
-  --error: #c42b1c;
-  --error-soft: rgb(196 43 28 / 0.1);
-  --grid-dot: rgb(23 24 27 / 0.09);
-  --highlight: #fdf1c7;
-  --highlight-strong: #f9df85;
-  --shadow: 0 1px 2px rgb(30 34 44 / 0.05), 0 8px 24px -12px rgb(30 34 44 / 0.14);
-  /* Partition-group tints (categorical, used only to encode equivalence classes). */
-  --g0: #dbe7ff; --g0-line: #4b6fd6;
-  --g1: #ffe1cc; --g1-line: #c2410c;
-  --g2: #d8f1e0; --g2-line: #23854a;
-  --g3: #efdcfa; --g3-line: #8a46b8;
-  --g4: #fdf1c2; --g4-line: #a07a06;
-  --g5: #d4f0f2; --g5-line: #1d8590;
-
-  --sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --mono: 'Geist Mono Variable', ui-monospace, 'Cascadia Code', Consolas, monospace;
-  --r-panel: 14px;
-  --r-control: 9px;
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-
-  font-family: var(--sans);
-  font-feature-settings: 'ss01', 'cv11';
-  color: var(--text);
-  background: var(--bg);
-  color-scheme: light;
-  -webkit-font-smoothing: antialiased;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #0d0e10;
-    --surface: #141518;
-    --surface-2: #1c1d21;
-    --text: #ececef;
-    --muted: #a0a3ab;
-    --faint: #6e717a;
-    --border: #25272c;
-    --border-strong: #363941;
-    --accent: #ff7a3d;
-    --accent-strong: #ff9461;
-    --accent-ink: #1a0d05;
-    --accent-soft: rgb(255 122 61 / 0.13);
-    --accent-line: rgb(255 122 61 / 0.45);
-    --ok: #4ade80;
-    --ok-soft: rgb(74 222 128 / 0.13);
-    --error: #ff7b6e;
-    --error-soft: rgb(255 123 110 / 0.13);
-    --grid-dot: rgb(236 236 239 / 0.07);
-  --highlight: #2f2a14;
-  --highlight-strong: #54451a;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.6);
-    --g0: #1d2a4a; --g0-line: #7ea2ff;
-    --g1: #45230f; --g1-line: #ff9461;
-    --g2: #14361f; --g2-line: #5fd38c;
-    --g3: #36204a; --g3-line: #c79bf0;
-    --g4: #3a3110; --g4-line: #e8c34a;
-    --g5: #10363a; --g5-line: #5ccfd8;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme='dark'] {
   --bg: #0d0e10;
   --surface: #141518;
   --surface-2: #1c1d21;
@@ -106,13 +29,26 @@
   --highlight: #2f2a14;
   --highlight-strong: #54451a;
   --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.6);
+  /* Partition-group tints (categorical, used only to encode equivalence classes). */
   --g0: #1d2a4a; --g0-line: #7ea2ff;
   --g1: #45230f; --g1-line: #ff9461;
   --g2: #14361f; --g2-line: #5fd38c;
   --g3: #36204a; --g3-line: #c79bf0;
   --g4: #3a3110; --g4-line: #e8c34a;
   --g5: #10363a; --g5-line: #5ccfd8;
+
+  --sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono Variable', ui-monospace, 'Cascadia Code', Consolas, monospace;
+  --r-panel: 14px;
+  --r-control: 9px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  font-family: var(--sans);
+  font-feature-settings: 'ss01', 'cv11';
+  color: var(--text);
+  background: var(--bg);
   color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
 }
 
 * { box-sizing: border-box; }
@@ -150,26 +86,18 @@ code, pre, textarea, .mono { font-family: var(--mono); font-feature-settings: no
 .brand-outer { fill: none; stroke: var(--text); stroke-width: 2; }
 .brand-inner { fill: var(--accent); }
 .sidebar ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
-.sidebar a:not(.brand), .theme-toggle {
+.sidebar a:not(.brand) {
   display: flex; align-items: center; gap: 0.65rem;
   padding: 0.5rem 0.6rem; border-radius: var(--r-control);
   text-decoration: none; color: var(--muted); font-size: 0.92rem;
   transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
-.sidebar a:not(.brand):hover, .theme-toggle:hover { background: var(--surface-2); color: var(--text); }
+.sidebar a:not(.brand):hover { background: var(--surface-2); color: var(--text); }
 .sidebar a.active { background: var(--accent-soft); color: var(--accent); font-weight: 560; }
 .nav-label { flex: 1; text-align: left; }
 .badge {
   font-size: 0.68rem; color: var(--faint); border: 1px solid var(--border);
   border-radius: 999px; padding: 0.05rem 0.45rem; font-weight: 500;
-}
-.theme-toggle { margin-top: auto; width: 100%; border: 0; background: none; font: inherit; cursor: pointer; }
-.theme-toggle .icon-moon { display: none; }
-:root[data-theme='dark'] .theme-toggle .icon-sun { display: none; }
-:root[data-theme='dark'] .theme-toggle .icon-moon { display: block; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .theme-toggle .icon-sun { display: none; }
-  :root:not([data-theme='light']) .theme-toggle .icon-moon { display: block; }
 }
 
 .content { padding: 2rem clamp(1rem, 3vw, 2.75rem) 4rem; min-width: 0; }
@@ -476,7 +404,6 @@ input::placeholder { color: var(--faint); }
   }
   .brand span, .sidebar .nav-label, .sidebar .badge { display: none; }
   .sidebar ul { display: flex; }
-  .theme-toggle { margin: 0 0 0 auto; width: auto; }
   .content { padding: 1.25rem 1rem 3rem; }
   .topics { grid-template-columns: minmax(0, 1fr); }
   .topic-0, .topic-1 { grid-column: auto; }
