@@ -13,9 +13,9 @@ import ComingSoon from './components/ComingSoon';
 export const TOPICS = [
   { id: 'home', label: 'Home', ready: true },
   { id: 'regex-dfa', label: 'Regex to DFA', ready: true },
+  { id: 'bottom-up', label: 'Bottom-Up Parsing', ready: true },
   { id: 'first-follow', label: 'First & Follow', ready: false },
   { id: 'top-down', label: 'Top-Down Parsing (LL)', ready: false },
-  { id: 'bottom-up', label: 'Bottom-Up Parsing', ready: true },
 ] as const;
 
 export type TopicId = (typeof TOPICS)[number]['id'];
