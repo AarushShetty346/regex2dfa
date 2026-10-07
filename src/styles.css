@@ -26,6 +26,8 @@
   --error: #c42b1c;
   --error-soft: rgb(196 43 28 / 0.1);
   --grid-dot: rgb(23 24 27 / 0.09);
+  --highlight: #fdf1c7;
+  --highlight-strong: #f9df85;
   --shadow: 0 1px 2px rgb(30 34 44 / 0.05), 0 8px 24px -12px rgb(30 34 44 / 0.14);
   /* Partition-group tints (categorical, used only to encode equivalence classes). */
   --g0: #dbe7ff; --g0-line: #4b6fd6;
@@ -69,6 +71,8 @@
     --error: #ff7b6e;
     --error-soft: rgb(255 123 110 / 0.13);
     --grid-dot: rgb(236 236 239 / 0.07);
+  --highlight: #2f2a14;
+  --highlight-strong: #54451a;
     --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.6);
     --g0: #1d2a4a; --g0-line: #7ea2ff;
     --g1: #45230f; --g1-line: #ff9461;
@@ -99,6 +103,8 @@
   --error: #ff7b6e;
   --error-soft: rgb(255 123 110 / 0.13);
   --grid-dot: rgb(236 236 239 / 0.07);
+  --highlight: #2f2a14;
+  --highlight-strong: #54451a;
   --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.6);
   --g0: #1d2a4a; --g0-line: #7ea2ff;
   --g1: #45230f; --g1-line: #ff9461;
@@ -355,8 +361,8 @@ input::placeholder { color: var(--faint); }
 .step-item.current button { background: var(--accent-soft); color: var(--accent); font-weight: 560; }
 .step-item.current .step-index { color: var(--accent); }
 
-.legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.8rem; color: var(--muted); }
-.legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.graph-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.8rem; color: var(--muted); }
+.graph-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
 .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--border-strong); }
 .swatch-new { background: var(--accent); border-color: var(--accent); }
 .swatch-focus { background: var(--accent-soft); border-color: var(--accent); }
@@ -365,7 +371,7 @@ input::placeholder { color: var(--faint); }
 .table-wrap { overflow: auto; max-height: 340px; border: 1px solid var(--border); border-radius: var(--r-panel); background: var(--surface); }
 .dtran { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 .dtran caption { text-align: left; padding: 0.7rem 0.85rem 0.3rem; font-weight: 600; font-size: 0.82rem; color: var(--muted); }
-.dtran th, .dtran td { padding: 0.38rem 0.85rem; text-align: left; white-space: nowrap; }
+.dtran th, .dtran td { border: 0; padding: 0.38rem 0.85rem; text-align: left; white-space: nowrap; }
 .dtran thead th { font-size: 0.75rem; font-weight: 560; color: var(--faint); border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); }
 .dtran tbody th { font-weight: 600; }
 .dtran tr.group-start > * { border-top: 1px solid var(--border); }

@@ -6,7 +6,7 @@
 .section-number {
   display: inline-grid; place-items: center;
   width: 1.6rem; height: 1.6rem; border-radius: 50%;
-  background: var(--accent); color: #fff; font-size: 0.85rem; margin-right: 0.25rem;
+  background: var(--accent); color: var(--accent-ink); font-size: 0.85rem; margin-right: 0.25rem;
 }
 
 .hint { font-size: 0.875rem; margin: 0.4rem 0; }

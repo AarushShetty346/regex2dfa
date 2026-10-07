@@ -78,7 +78,7 @@ export default function ThompsonStage({ result, postfix }: { result: ThompsonRes
 
 function Legend() {
   return (
-    <div className="legend" aria-label="Legend">
+    <div className="graph-legend" aria-label="Legend">
       <span>
         <i className="swatch swatch-new" /> added this step
       </span>
