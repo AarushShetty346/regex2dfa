@@ -12,36 +12,26 @@ interface Props {
 }
 
 export default function ParseTraceView({ grammar, table, defaultInput = '' }: Props) {
-  const [draft, setDraft] = useState(defaultInput);
-  const [submitted, setSubmitted] = useState(defaultInput);
-  const result = useMemo(() => parseString(grammar, table, submitted), [grammar, table, submitted]);
+  const [input, setInput] = useState(defaultInput);
+  const result = useMemo(() => parseString(grammar, table, input), [grammar, table, input]);
   const stepper = useStepper(result.steps.length, result);
   const last = result.steps[result.steps.length - 1];
 
   return (
     <div>
-      <form
-        className="parse-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSubmitted(draft);
-        }}
-      >
+      <div className="parse-form">
         <label>
           Input string:{' '}
           <input
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="e.g. id + id * id"
             spellCheck={false}
             className="mono"
           />
         </label>
-        <button type="submit" className="primary">
-          Parse
-        </button>
         <span className="muted">$ is appended automatically.</span>
-      </form>
+      </div>
 
       <details className="info-note">
         <summary>ℹ️ How handles are found and matched (skeletal reduction)</summary>
