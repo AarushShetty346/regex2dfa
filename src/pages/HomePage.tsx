@@ -115,12 +115,13 @@ export default function HomePage() {
             Type a regex or a grammar and follow every state, set and table the textbook algorithm builds.
           </p>
           <div className="hero-actions" data-hero>
-            <a className="button primary" href="#/regex-dfa">
+            <a className="button hero-cta" href="#/regex-dfa">
               Open Regex to DFA
               <ArrowRight size={16} weight="bold" />
             </a>
-            <a className="button" href="#/bottom-up">
-              Bottom-up parsing
+            <a className="button hero-cta" href="#/bottom-up">
+              Open Bottom-up parsing
+              <ArrowRight size={16} weight="bold" />
             </a>
           </div>
         </div>

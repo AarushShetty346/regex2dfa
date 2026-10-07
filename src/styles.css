@@ -179,6 +179,11 @@ input::placeholder { color: var(--faint); }
 .hero .lede { font-size: 1.1rem; margin-bottom: 1.75rem; max-width: 42ch; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 .hero-actions .button { padding: 0.65rem 1.1rem; font-size: 0.95rem; }
+/* Both calls to action stay neutral until hovered; the arrow slides in with the accent. */
+.hero-cta { gap: 0; }
+.hero-cta svg { max-width: 0; opacity: 0; transform: translateX(-4px); transition: max-width 0.25s var(--ease), opacity 0.2s var(--ease), transform 0.25s var(--ease), margin 0.25s var(--ease); }
+.hero-cta:hover, .hero-cta:focus-visible { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.hero-cta:hover svg, .hero-cta:focus-visible svg { max-width: 16px; opacity: 1; transform: none; margin-left: 0.4rem; }
 .hero-demo { margin: 0; display: grid; gap: 0.75rem; }
 .hero-demo .canvas { min-height: 300px; box-shadow: var(--shadow); }
 .hero-demo figcaption { display: flex; align-items: center; gap: 1rem; color: var(--muted); font-size: 0.9rem; flex-wrap: wrap; }
@@ -188,7 +193,11 @@ input::placeholder { color: var(--faint); }
 .topics { display: grid; grid-template-columns: 1.4fr 1fr 1fr; grid-template-rows: auto auto; gap: 1rem; }
 .topic {
   display: flex; flex-direction: column; gap: 0.5rem; padding: 1.4rem 1.5rem;
-  border-radius: var(--r-panel); border: 1px solid var(--border); background: var(--surface);
+  border-radius: var(--r-panel); border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 85% 18%, var(--accent-soft), transparent 55%),
+    radial-gradient(var(--grid-dot) 1px, transparent 1.4px) 0 0 / 16px 16px,
+    var(--surface);
   color: var(--text); text-decoration: none;
   transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
 }
@@ -198,10 +207,6 @@ input::placeholder { color: var(--faint); }
 .topic-foot { margin-top: auto; padding-top: 0.75rem; display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; font-weight: 560; color: var(--accent); }
 .topic-0 {
   grid-row: span 2; justify-content: flex-end; min-height: 240px;
-  background:
-    radial-gradient(circle at 85% 18%, var(--accent-soft), transparent 55%),
-    radial-gradient(var(--grid-dot) 1px, transparent 1.4px) 0 0 / 16px 16px,
-    var(--surface);
 }
 .topic-0 h2 { font-size: 1.6rem; }
 .topic-1 { grid-column: span 2; }
