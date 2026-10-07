@@ -26,7 +26,7 @@ npm run build    # type-check and build to dist/
 
 ## Stack
 
-Vite + React + TypeScript, Vitest for tests, plain CSS with theme tokens (light and dark).
+Vite + React + TypeScript, Vitest for tests, plain CSS with colour tokens (dark theme only).
 Graphs are laid out with dagre and drawn as SVG; GSAP animates step-to-step changes and
 Lenis smooths page scrolling (both skipped under `prefers-reduced-motion`). Fonts are
 self-hosted Geist and Geist Mono, icons are Phosphor. No backend.
