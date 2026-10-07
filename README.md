@@ -8,7 +8,7 @@ the UI walks through those steps with Next / Previous / Show All / Reset.
 
 | Topic | Status |
 |---|---|
-| Bottom-Up Parsing → Operator Precedence Parsing | In progress (`feature/operator-precedence`) |
+| Bottom-Up Parsing → Operator Precedence Parsing | Built on `feature/operator-precedence`; see [docs/OPERATOR_PRECEDENCE_HANDOFF.md](docs/OPERATOR_PRECEDENCE_HANDOFF.md) |
 | Bottom-Up Parsing → LR Parsing | Coming soon |
 | First & Follow, Top-Down (LL) | Coming soon |
 

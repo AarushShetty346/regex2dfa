@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ComingSoon from '../components/ComingSoon';
+import OperatorPrecedenceView from '../features/operator-precedence/OperatorPrecedenceView';
 
 type Method = 'operator-precedence' | 'lr';
 
@@ -28,7 +29,7 @@ export default function BottomUpParsingPage() {
       </header>
 
       {method === 'operator-precedence' ? (
-        <ComingSoon title="Operator Precedence Parsing" note="Under construction on this branch." />
+        <OperatorPrecedenceView />
       ) : (
         <ComingSoon
           title="LR Parsing"
