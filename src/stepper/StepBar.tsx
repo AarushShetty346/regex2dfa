@@ -5,7 +5,7 @@ import { Button, IconButton, Kbd, cx } from '../ui/primitives';
 
 interface StepBarProps {
   stepper: Stepper;
-  /** Name of the control group, e.g. "Thompson construction steps". */
+  /** Name of the control group, e.g. "DFA construction steps". */
   label?: string;
   /** Bind ← → Home End to this bar while focus is not in a text field or a tab list. */
   keyboard?: boolean;

@@ -144,7 +144,7 @@ export function parseRegex(input: string): RegexNode {
   return tree;
 }
 
-/** Nodes in post-order: children before parents. This is the order Thompson's construction runs in. */
+/** Nodes in post-order: children before parents. Leaves come out in reading order. */
 export function postOrder(node: RegexNode): RegexNode[] {
   const out: RegexNode[] = [];
   const visit = (n: RegexNode) => {

@@ -2,12 +2,11 @@ import { useDeferredValue, useEffect, useId, useMemo, useState } from 'react';
 import { Tabs } from '@ark-ui/react/tabs';
 import { CircleAlert, History, Regex } from 'lucide-react';
 import { RegexSyntaxError, regexPipeline, type Pipeline } from '../../algorithms/regex';
-import { DEFAULT_REGEX, EXAMPLES, STAGES, isStage, type Stage } from '../../lib/regexExamples';
+import { DEFAULT_REGEX, STAGES, isStage, type Stage } from '../../lib/regexExamples';
 import { PageIntro, cx } from '../../ui/primitives';
 import TreeStage from './stages/TreeStage';
-import ThompsonStage from './stages/ThompsonStage';
-import SubsetStage from './stages/SubsetStage';
-import MinimizeStage from './stages/MinimizeStage';
+import FollowposStage from './stages/FollowposStage';
+import DfaStage from './stages/DfaStage';
 import SimulateStage from './stages/SimulateStage';
 import { useStageEntrance } from './workbench';
 
@@ -25,7 +24,7 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
   const initial = useMemo(() => {
     const re = params?.get('re');
     const stage = params?.get('stage') ?? null;
-    return { re: re ?? DEFAULT_REGEX, stage: isStage(stage) ? stage : 'nfa' };
+    return { re: re ?? DEFAULT_REGEX, stage: isStage(stage) ? stage : 'tree' };
   }, [params]);
   const [source, setSource] = useState(initial.re);
   const [stage, setStage] = useState<Stage>(initial.stage);
@@ -50,10 +49,9 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
   }, [shownSrc, stage]);
 
   const counts: Record<Stage, string> = {
-    tree: `${pipeline.postfix.split(' ').length} nodes`,
-    nfa: `${pipeline.thompson.nfa.states.length} states`,
-    dfa: `${pipeline.subset.dfa.states.length} states`,
-    min: `${pipeline.minimize.dfa.states.length} states`,
+    tree: `${pipeline.direct.positions.length} positions`,
+    follow: `${pipeline.direct.followSteps.length} rules`,
+    dfa: `${pipeline.direct.dfa.states.length} states`,
     test: 'run',
   };
   const stageRef = useStageEntrance<HTMLDivElement>(`${stage}|${shownSrc}`);
@@ -61,8 +59,8 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
   return (
     <div className="page page-wide">
       <PageIntro kicker="Module 01 · Finite automata" title="Regex to DFA">
-        Type a regular expression and follow it through a syntax tree, a Thompson NFA, subset construction and minimization, then test
-        strings on the result.
+        Type a regular expression and build its DFA with the direct method: an augmented syntax tree, nullable, firstpos and lastpos,
+        then followpos. Test strings on the result.
       </PageIntro>
 
       <section className="expr-card" aria-label="Expression">
@@ -110,24 +108,6 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
               <code>\e</code> empty string
             </p>
           )}
-          <div className="expr-examples">
-            <span className="field-label" id={`${inputId}-ex`}>
-              Try
-            </span>
-            <div className="chip-row" role="group" aria-labelledby={`${inputId}-ex`}>
-              {EXAMPLES.map((ex) => (
-                <button
-                  type="button"
-                  key={ex}
-                  className={cx('chip mono', ex === source && 'is-on')}
-                  aria-pressed={ex === source}
-                  onClick={() => setSource(ex)}
-                >
-                  {ex}
-                </button>
-              ))}
-            </div>
-          </div>
         </form>
 
         <dl className="expr-stats" aria-label={`Summary for ${shownSrc}`}>
@@ -140,9 +120,9 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
             <dd className="mono">{pipeline.postfix}</dd>
           </div>
           <div className="stat stat-flow">
-            <dt>States</dt>
+            <dt>DFA</dt>
             <dd className="mono">
-              {pipeline.thompson.nfa.states.length} NFA → {pipeline.subset.dfa.states.length} DFA → {pipeline.minimize.dfa.states.length} min
+              {pipeline.direct.positions.length} positions → {pipeline.direct.dfa.states.length} states
             </dd>
           </div>
         </dl>
@@ -164,7 +144,7 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
         lazyMount
         unmountOnExit
       >
-        <Tabs.List className="stage-list" aria-label="Pipeline stages">
+        <Tabs.List className="stage-list" aria-label="Direct method stages">
           {STAGES.map((s, i) => (
             <Tabs.Trigger key={s.id} value={s.id} className="stage-tab">
               <span className="stage-n mono" aria-hidden>
@@ -182,11 +162,10 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
           <Tabs.Content key={s.id} value={s.id} className="stage-panel">
             {stage === s.id && (
               <div ref={stageRef} key={`${stage}|${shownSrc}`}>
-                {s.id === 'tree' && <TreeStage pipeline={pipeline} />}
-                {s.id === 'nfa' && <ThompsonStage result={pipeline.thompson} postfix={pipeline.postfix} />}
-                {s.id === 'dfa' && <SubsetStage result={pipeline.subset} nfa={pipeline.thompson.nfa} />}
-                {s.id === 'min' && <MinimizeStage result={pipeline.minimize} dfa={pipeline.subset.dfa} />}
-                {s.id === 'test' && <SimulateStage dfa={pipeline.minimize.dfa} />}
+                {s.id === 'tree' && <TreeStage direct={pipeline.direct} />}
+                {s.id === 'follow' && <FollowposStage direct={pipeline.direct} />}
+                {s.id === 'dfa' && <DfaStage direct={pipeline.direct} />}
+                {s.id === 'test' && <SimulateStage dfa={pipeline.direct.dfa} />}
               </div>
             )}
           </Tabs.Content>

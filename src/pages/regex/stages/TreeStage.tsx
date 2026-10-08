@@ -1,36 +1,37 @@
 import { useMemo } from 'react';
-import { EPSILON, type Pipeline, type RegexNode } from '../../../algorithms/regex';
-import DiagramPanel from '../../../graph/DiagramPanel';
-import type { GraphEdge, GraphNode } from '../../../lib/graph/layout';
-import { Facts, Narration, Workbench } from '../workbench';
+import { postOrder, type DirectResult } from '../../../algorithms/regex';
+import DiagramPanel, { Key } from '../../../graph/DiagramPanel';
+import { useStepper } from '../../../lib/stepper/useStepper';
+import StepBar from '../../../stepper/StepBar';
+import { Narration, SetText, StepLog, Workbench } from '../workbench';
+import { children, treeGraph } from './parts';
 
-const OP_LABEL: Record<RegexNode['kind'], string> = {
-  symbol: '',
-  epsilon: EPSILON,
-  concat: '•',
-  union: '|',
-  star: '*',
-  plus: '+',
-  optional: '?',
-};
+/** Augmented syntax tree (r)#, with nullable, firstpos and lastpos computed node by node. */
+export default function TreeStage({ direct }: { direct: DirectResult }) {
+  const steps = direct.functionSteps;
+  const stepper = useStepper(steps.length, direct);
+  const step = stepper.current >= 0 ? steps[stepper.current] : null;
+  const order = useMemo(() => postOrder(direct.tree), [direct]);
+  const byId = useMemo(() => new Map(order.map((n) => [n.id, n])), [order]);
 
-export default function TreeStage({ pipeline }: { pipeline: Pipeline }) {
   const graph = useMemo(() => {
-    const nodes: GraphNode[] = [];
-    const edges: GraphEdge[] = [];
-    // Pre-order (parent, then left before right) so children stay in reading order.
-    const visit = (n: RegexNode) => {
-      const leaf = n.kind === 'symbol' || n.kind === 'epsilon';
-      nodes.push({ id: `t${n.id}`, label: n.kind === 'symbol' ? n.symbol : OP_LABEL[n.kind], tone: leaf ? 'idle' : 'set' });
-      const kids = n.kind === 'concat' || n.kind === 'union' ? [n.left, n.right] : 'child' in n ? [n.child] : [];
-      for (const k of kids) edges.push({ from: `t${n.id}`, to: `t${k.id}`, label: '' });
-      kids.forEach(visit);
-    };
-    visit(pipeline.tree);
-    return { nodes, edges };
-  }, [pipeline]);
+    const done = new Set(steps.slice(0, stepper.shown).map((s) => s.nodeId));
+    const kids = new Set(step ? children(byId.get(step.nodeId)!).map((k) => k.id) : []);
+    return treeGraph(direct, (n) => {
+      if (!step) return n.kind === 'symbol' || n.kind === 'epsilon' ? 'idle' : 'set';
+      if (n.id === step.nodeId) return 'new';
+      if (kids.has(n.id)) return 'focus';
+      return done.has(n.id) ? 'idle' : 'muted';
+    });
+  }, [direct, steps, step, stepper.shown, byId]);
 
-  const { thompson, subset, minimize, alphabet, postfix } = pipeline;
+  const computed = steps.slice(0, stepper.shown);
+  const posOf = new Map(direct.positions.map((p) => [p.nodeId, p.pos]));
+  const nodeName = (id: number) => {
+    const n = byId.get(id)!;
+    if (n.kind === 'symbol') return `${n.symbol} (${posOf.get(id)})`;
+    return { epsilon: 'ε', concat: '•', union: '|', star: '*', plus: '+', optional: '?' }[n.kind];
+  };
 
   return (
     <Workbench
@@ -39,34 +40,71 @@ export default function TreeStage({ pipeline }: { pipeline: Pipeline }) {
           nodes={graph.nodes}
           edges={graph.edges}
           direction="tree"
-          label="Syntax tree of the regular expression"
+          label="Augmented syntax tree of the regular expression"
           maxScale={1}
-          title="Syntax tree"
-          meta="• is concatenation"
+          title="Augmented syntax tree (r)#"
+          meta={`${direct.positions.length} positions · • is concatenation`}
+          legend={
+            step ? (
+              <>
+                <Key kind="new">node being computed</Key>
+                <Key kind="focus">its children</Key>
+                <Key kind="muted">not computed yet</Key>
+              </>
+            ) : undefined
+          }
         />
       }
+      controls={<StepBar stepper={stepper} label="nullable, firstpos and lastpos steps" keyboard docked />}
       inspector={
         <>
-          <Narration kicker="Syntax tree" title="Operators bind tighter as you go down">
-            Star, plus and optional bind tightest, then concatenation (shown as •), then union. Reading the tree bottom-up gives the
-            postfix order Thompson's construction follows.
-          </Narration>
-          <Facts
-            items={[
-              { term: 'Postfix', value: postfix, mono: true },
-              { term: 'Alphabet', value: alphabet.length ? `{${alphabet.join(', ')}}` : '∅', mono: true },
-              {
-                term: 'Pipeline',
-                value: (
-                  <>
-                    <span className="mono">{thompson.nfa.states.length}</span> NFA states, then{' '}
-                    <span className="mono">{subset.dfa.states.length}</span> DFA states, then{' '}
-                    <span className="mono">{minimize.dfa.states.length}</span> after minimization
-                  </>
-                ),
-              },
-            ]}
-          />
+          {step ? (
+            <Narration kicker="nullable · firstpos · lastpos" title={step.title}>
+              {step.detail}
+            </Narration>
+          ) : (
+            <Narration kicker="Direct method" title="Augment the expression with an end marker">
+              The expression is wrapped as (r)#. Each symbol leaf gets a position, numbered left to right, and # gets the last one, so
+              reaching it means the input matched. Press Next to compute nullable, firstpos and lastpos for every node, bottom-up.
+            </Narration>
+          )}
+          <div className="table-scroll" data-lenis-prevent tabIndex={0} aria-label="nullable, firstpos and lastpos table">
+            <table className="table table-compact">
+              <caption>Node functions</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Node</th>
+                  <th scope="col">nullable</th>
+                  <th scope="col">firstpos</th>
+                  <th scope="col">lastpos</th>
+                </tr>
+              </thead>
+              <tbody>
+                {computed.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="table-empty">
+                      Rows appear as nodes are computed.
+                    </td>
+                  </tr>
+                )}
+                {computed.map((s) => (
+                  <tr key={s.nodeId} className={s === step ? 'is-active' : undefined}>
+                    <th scope="row" className="mono">
+                      {nodeName(s.nodeId)}
+                    </th>
+                    <td className="mono">{s.facts.nullable ? 'true' : 'false'}</td>
+                    <td>
+                      <SetText set={s.facts.firstpos} />
+                    </td>
+                    <td>
+                      <SetText set={s.facts.lastpos} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <StepLog items={steps.map((s) => ({ title: s.title }))} shown={stepper.shown} onSelect={stepper.goTo} />
         </>
       }
     />

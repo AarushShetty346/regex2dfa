@@ -1,34 +1,22 @@
 import { alphabetOf, parseRegex, toPostfix, type RegexNode } from './parse';
-import { thompson, type ThompsonResult } from './thompson';
-import { subsetConstruction, type SubsetResult } from './subset';
-import { minimizeDfa, type MinimizeResult } from './minimize';
+import { directConstruction, type DirectResult } from './direct';
 
 export * from './parse';
-export * from './thompson';
-export * from './subset';
-export * from './minimize';
+export * from './dfa';
+export * from './direct';
 export * from './simulate';
 
 export interface Pipeline {
+  /** The expression as typed, before augmenting. */
   tree: RegexNode;
   postfix: string;
   alphabet: string[];
-  thompson: ThompsonResult;
-  subset: SubsetResult;
-  minimize: MinimizeResult;
+  direct: DirectResult;
 }
 
-/** Regex → syntax tree → Thompson NFA → subset-construction DFA → minimal DFA. */
+/** Regex → augmented syntax tree → nullable/firstpos/lastpos → followpos → DFA (the direct method). */
 export function regexPipeline(input: string): Pipeline {
   const tree = parseRegex(input);
-  const t = thompson(tree);
-  const s = subsetConstruction(t.nfa);
-  return {
-    tree,
-    postfix: toPostfix(tree),
-    alphabet: alphabetOf(tree),
-    thompson: t,
-    subset: s,
-    minimize: minimizeDfa(s.dfa),
-  };
+  const alphabet = alphabetOf(tree);
+  return { tree, postfix: toPostfix(tree), alphabet, direct: directConstruction(tree, alphabet) };
 }

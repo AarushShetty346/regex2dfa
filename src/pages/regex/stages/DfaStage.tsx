@@ -1,17 +1,20 @@
 import { useMemo } from 'react';
-import { EPSILON, type NFA, type SubsetResult } from '../../../algorithms/regex';
+import type { DirectResult } from '../../../algorithms/regex';
 import DiagramPanel, { Key } from '../../../graph/DiagramPanel';
 import type { GraphEdge, GraphNode } from '../../../lib/graph/layout';
 import { useStepper } from '../../../lib/stepper/useStepper';
 import StepBar from '../../../stepper/StepBar';
 import { CanvasEmpty, Narration, SetText, StateName, StepLog, Workbench } from '../workbench';
+import { FollowTable } from './parts';
 
-export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa: NFA }) {
-  const { steps } = result;
-  const stepper = useStepper(steps.length, result);
+/** DFA states are sets of positions; transitions are unions of followpos. */
+export default function DfaStage({ direct }: { direct: DirectResult }) {
+  const steps = direct.dfaSteps;
+  const { alphabet } = direct.dfa;
+  const stepper = useStepper(steps.length, direct);
   const step = stepper.current >= 0 ? steps[stepper.current] : null;
 
-  const dfaGraph = useMemo(() => {
+  const graph = useMemo(() => {
     if (!step) return null;
     const { dfa } = step;
     const focus = step.kind === 'start' ? step.created : step.from;
@@ -33,30 +36,6 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
     return { nodes, edges };
   }, [step]);
 
-  const nfaGraph = useMemo(() => {
-    const closure = new Set(step?.closure ?? []);
-    const moved = new Set(step?.kind === 'move' ? step.move : []);
-    const source = new Set(step?.kind === 'move' ? step.dfa.states[step.from].nfaStates : []);
-    const nodes: GraphNode[] = nfa.states.map((s) => ({
-      id: `q${s}`,
-      label: String(s),
-      start: s === nfa.start,
-      accepting: s === nfa.accept,
-      tone: moved.has(s) ? 'new' : closure.has(s) ? 'set' : step ? 'muted' : 'idle',
-    }));
-    const edges: GraphEdge[] = nfa.transitions.map((t) => {
-      const symbolEdge = step?.kind === 'move' && t.symbol === step.symbol && source.has(t.from);
-      const closureEdge = t.symbol === EPSILON && closure.has(t.from) && closure.has(t.to);
-      return {
-        from: `q${t.from}`,
-        to: `q${t.to}`,
-        label: t.symbol,
-        tone: symbolEdge ? 'new' : closureEdge ? 'focus' : step ? 'muted' : 'idle',
-      };
-    });
-    return { nodes, edges };
-  }, [nfa, step]);
-
   const visibleStates = step ? step.dfa.states : [];
   const cell = (from: number, a: string) => {
     if (!step) return null;
@@ -67,53 +46,33 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
   return (
     <Workbench
       canvas={
-        dfaGraph ? (
+        graph ? (
           <DiagramPanel
-            nodes={dfaGraph.nodes}
-            edges={dfaGraph.edges}
+            nodes={graph.nodes}
+            edges={graph.edges}
             label={`DFA after step ${stepper.shown}`}
             title="DFA under construction"
-            meta={`${dfaGraph.nodes.length} states so far`}
+            meta={`${graph.nodes.length} states so far`}
             legend={
               <>
                 <Key kind="new">new state or edge</Key>
                 <Key kind="focus">state being expanded</Key>
-                <Key kind="accept">contains the NFA accept state</Key>
+                <Key kind="accept">contains the # position</Key>
               </>
             }
           />
         ) : (
-          <CanvasEmpty title="No DFA states yet" hint="Press Next to take the ε-closure of the NFA start state. That set is the first DFA state." />
+          <CanvasEmpty title="No DFA states yet" hint="Press Next to take firstpos of the root. That set of positions is the start state." />
         )
       }
-      controls={<StepBar stepper={stepper} label="Subset construction steps" keyboard docked />}
+      controls={<StepBar stepper={stepper} label="DFA construction steps" keyboard docked />}
       below={
-        <section className="canvas-card is-secondary" data-enter aria-labelledby="nfa-ref-title">
-          <DiagramPanel
-            compact
-            nodes={nfaGraph.nodes}
-            edges={nfaGraph.edges}
-            label="Thompson NFA with the current sets highlighted"
-            maxScale={1.1}
-            title={<span id="nfa-ref-title">Thompson NFA, for reference</span>}
-            meta={
-              step?.kind === 'move' ? (
-                <>
-                  edges on <span className="mono">{step.symbol}</span> out of {step.dfa.states[step.from].name}, then their ε-closure
-                </>
-              ) : step ? (
-                'the ε-closure of the start state'
-              ) : (
-                'highlights follow each step'
-              )
-            }
-            legend={
-              <>
-                <Key kind="new">reached on the symbol</Key>
-                <Key kind="set">in the ε-closure</Key>
-                <Key kind="eps">ε-edge</Key>
-              </>
-            }
+        <section className="canvas-card is-secondary" data-enter aria-label="followpos, for reference">
+          <FollowTable
+            direct={direct}
+            followpos={direct.followpos}
+            active={step?.kind === 'move' ? step.used : []}
+            caption="followpos, for reference"
           />
         </section>
       }
@@ -124,9 +83,9 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
               {step.detail}
             </Narration>
           ) : (
-            <Narration kicker="Subset construction" title="Each DFA state is a set of NFA states">
-              Start from the ε-closure of the NFA's start. For every DFA state and every symbol, follow the symbol's edges, then close over
-              ε. New sets become new DFA states.
+            <Narration kicker="Direct method" title="Each DFA state is a set of positions">
+              Start from firstpos of the root. For every state and symbol, take the positions in the state that hold the symbol and union
+              their followpos. New sets become new states; any set containing the # position is accepting.
             </Narration>
           )}
           <div className="table-scroll" data-lenis-prevent tabIndex={0} aria-label="Dtran transition table">
@@ -135,8 +94,8 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
               <thead>
                 <tr>
                   <th scope="col">State</th>
-                  <th scope="col">NFA states</th>
-                  {nfa.alphabet.map((a) => (
+                  <th scope="col">Positions</th>
+                  {alphabet.map((a) => (
                     <th scope="col" key={a} className="mono">
                       {a}
                     </th>
@@ -146,7 +105,7 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
               <tbody>
                 {visibleStates.length === 0 && (
                   <tr>
-                    <td colSpan={2 + nfa.alphabet.length} className="table-empty">
+                    <td colSpan={2 + alphabet.length} className="table-empty">
                       Rows appear as states are discovered.
                     </td>
                   </tr>
@@ -157,9 +116,9 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
                       <StateName name={s.name} start={s.id === step?.dfa.start} accepting={s.accepting} />
                     </th>
                     <td>
-                      <SetText set={s.nfaStates} />
+                      <SetText set={s.positions} />
                     </td>
-                    {nfa.alphabet.map((a) => (
+                    {alphabet.map((a) => (
                       <td key={a} className={`mono${step?.kind === 'move' && step.from === s.id && step.symbol === a ? ' is-hit' : ''}`}>
                         {cell(s.id, a) || <span className="subtle">-</span>}
                       </td>

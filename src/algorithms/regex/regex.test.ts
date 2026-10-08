@@ -2,26 +2,14 @@ import { describe, expect, it } from 'vitest';
 import {
   EPSILON,
   RegexSyntaxError,
-  epsilonClosure,
-  move,
   parseRegex,
   regexPipeline,
   regexToString,
   simulate,
   toPostfix,
   type DFA,
-  type NFA,
   type RegexNode,
 } from './index';
-
-function nfaAccepts(nfa: NFA, input: string): boolean {
-  let cur = epsilonClosure(nfa, [nfa.start]);
-  for (const c of input) {
-    const m = move(nfa, cur, c);
-    cur = m.length ? epsilonClosure(nfa, m) : [];
-  }
-  return cur.includes(nfa.accept);
-}
 
 const dfaAccepts = (dfa: DFA, input: string) => simulate(dfa, input).accepted;
 
@@ -87,50 +75,46 @@ describe('parseRegex', () => {
   });
 });
 
-describe('Dragon Book example (a|b)*abb', () => {
-  const p = regexPipeline('(a|b)*abb');
+describe('Dragon Book example (a|b)*abb, direct method', () => {
+  const { direct } = regexPipeline('(a|b)*abb');
 
-  it('builds the 11-state Thompson NFA numbered 0..10', () => {
-    const { nfa } = p.thompson;
-    expect(nfa.states).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-    expect(nfa.start).toBe(0);
-    expect(nfa.accept).toBe(10);
-    const edges = nfa.transitions.map((t) => `${t.from}-${t.symbol}-${t.to}`).sort();
-    expect(edges).toEqual(
-      [
-        '0-ε-1', '0-ε-7', '1-ε-2', '1-ε-4', '2-a-3', '4-b-5', '3-ε-6', '5-ε-6',
-        '6-ε-1', '6-ε-7', '7-a-8', '8-b-9', '9-b-10',
-      ].sort(),
-    );
+  it('numbers positions 1..6 with # last', () => {
+    expect(direct.positions.map((p) => p.symbol)).toEqual(['a', 'b', 'a', 'b', 'b', '#']);
+    expect(direct.endPos).toBe(6);
+    expect(direct.positions.at(-1)!.end).toBe(true);
   });
 
-  it('subset construction gives states A..E as in the book', () => {
-    const { dfa } = p.subset;
-    expect(dfa.states.map((s) => s.nfaStates)).toEqual([
-      [0, 1, 2, 4, 7],
-      [1, 2, 3, 4, 6, 7, 8],
-      [1, 2, 4, 5, 6, 7],
-      [1, 2, 4, 5, 6, 7, 9],
-      [1, 2, 4, 5, 6, 7, 10],
+  it('computes firstpos and lastpos of the root', () => {
+    const root = direct.facts[direct.tree.id];
+    expect(root).toEqual({ nullable: false, firstpos: [1, 2, 3], lastpos: [6] });
+    expect(direct.functionSteps).toHaveLength(Object.keys(direct.facts).length);
+  });
+
+  it('computes the followpos table from the book', () => {
+    expect(direct.followpos.slice(1)).toEqual([[1, 2, 3], [1, 2, 3], [4], [5], [6], []]);
+    expect(direct.followSteps.at(-1)!.followpos).toEqual(direct.followpos);
+  });
+
+  it('builds the 4-state DFA A..D', () => {
+    const { dfa } = direct;
+    expect(dfa.states.map((s) => s.positions)).toEqual([
+      [1, 2, 3],
+      [1, 2, 3, 4],
+      [1, 2, 3, 5],
+      [1, 2, 3, 6],
     ]);
-    expect(dfa.states.filter((s) => s.accepting).map((s) => s.name)).toEqual(['E']);
+    expect(dfa.states.filter((s) => s.accepting).map((s) => s.name)).toEqual(['D']);
+    const edges = dfa.transitions.map((t) => `${dfa.states[t.from].name}-${t.symbol}-${dfa.states[t.to].name}`).sort();
+    expect(edges).toEqual(['A-a-B', 'A-b-A', 'B-a-B', 'B-b-C', 'C-a-B', 'C-b-D', 'D-a-B', 'D-b-A'].sort());
     // One step for the start state plus one per (state, symbol).
-    expect(p.subset.steps).toHaveLength(1 + 5 * 2);
+    expect(direct.dfaSteps).toHaveLength(1 + 4 * 2);
   });
 
-  it('minimization merges A and C into 4 states', () => {
-    const { dfa, steps } = p.minimize;
-    expect(dfa.states.map((s) => s.name)).toEqual(['AC', 'B', 'D', 'E']);
-    expect(steps.at(-1)!.kind).toBe('result');
-  });
-
-  it('every Thompson step only grows the NFA', () => {
-    const steps = p.thompson.steps;
-    for (let i = 1; i < steps.length; i++) {
-      expect(steps[i].states.length).toBeGreaterThanOrEqual(steps[i - 1].states.length);
-      expect(steps[i].transitions.length).toBeGreaterThanOrEqual(steps[i - 1].transitions.length);
-    }
-    expect(steps.at(-1)!.transitions).toHaveLength(p.thompson.nfa.transitions.length);
+  it('treats a literal # in the input as an ordinary symbol', () => {
+    const d = regexPipeline('a#').direct;
+    expect(d.endPos).toBe(3);
+    expect(simulate(d.dfa, 'a#').accepted).toBe(true);
+    expect(simulate(d.dfa, 'a').accepted).toBe(false);
   });
 });
 
@@ -152,28 +136,26 @@ describe('language equivalence against JS RegExp', () => {
     '(a|b)*a(a|b)(a|b)',
   ];
 
-  it.each(cases)('%s: NFA, DFA and minimal DFA agree with RegExp', (src) => {
+  it.each(cases)('%s: the direct DFA agrees with RegExp', (src) => {
     const p = regexPipeline(src);
     const oracle = new RegExp(`^(?:${toJs(p.tree)})$`);
     const alphabet = p.alphabet.length ? [...p.alphabet, 'z'] : ['z'];
     for (const s of allStrings(alphabet, 6)) {
       const want = oracle.test(s);
-      expect(nfaAccepts(p.thompson.nfa, s), `NFA on "${s}"`).toBe(want);
-      expect(dfaAccepts(p.subset.dfa, s), `DFA on "${s}"`).toBe(want);
-      expect(dfaAccepts(p.minimize.dfa, s), `min DFA on "${s}"`).toBe(want);
+      expect(dfaAccepts(p.direct.dfa, s), `DFA on "${s}"`).toBe(want);
     }
   });
 
-  it('minimal DFA sizes match known values', () => {
-    expect(regexPipeline('(0|1(01*0)*1)*').minimize.dfa.states).toHaveLength(3);
-    expect(regexPipeline('(a|b)*a(a|b)(a|b)').minimize.dfa.states).toHaveLength(8);
-    expect(regexPipeline('(a*|b*)*').minimize.dfa.states).toHaveLength(1);
+  it.each(cases)('%s: the DFA is deterministic', (src) => {
+    const { dfa } = regexPipeline(src).direct;
+    const keys = dfa.transitions.map((t) => `${t.from}/${t.symbol}`);
+    expect(new Set(keys).size).toBe(keys.length);
   });
 });
 
 describe('simulate', () => {
   it('reports where a run gets stuck', () => {
-    const dfa = regexPipeline('ab').minimize.dfa;
+    const dfa = regexPipeline('ab').direct.dfa;
     const run = simulate(dfa, 'abb');
     expect(run.accepted).toBe(false);
     expect(run.final).toBeNull();
