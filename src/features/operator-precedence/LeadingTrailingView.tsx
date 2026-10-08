@@ -42,24 +42,26 @@ export default function LeadingTrailingView({ grammar, result }: Props) {
   return (
     <div>
       <StepController stepper={stepper} label="Leading/Trailing steps" />
-      <table className="sets-table">
-        <thead>
-          <tr>
-            <th>Non-terminal</th>
-            <th>Leading</th>
-            <th>Trailing</th>
-          </tr>
-        </thead>
-        <tbody>
-          {grammar.nonTerminals.map((nt) => (
-            <tr key={nt}>
-              <th scope="row">{nt}</th>
-              {cell('leading', nt)}
-              {cell('trailing', nt)}
+      <div className="table-scroll" tabIndex={0} aria-label="Leading and Trailing sets" data-lenis-prevent>
+        <table className="sets-table">
+          <thead>
+            <tr>
+              <th>Non-terminal</th>
+              <th>Leading</th>
+              <th>Trailing</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {grammar.nonTerminals.map((nt) => (
+              <tr key={nt}>
+                <th scope="row">{nt}</th>
+                {cell('leading', nt)}
+                {cell('trailing', nt)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {step ? (
         <StepExplanation
@@ -68,7 +70,7 @@ export default function LeadingTrailingView({ grammar, result }: Props) {
           tone={step.kind === 'fixed-point' ? 'ok' : 'info'}
         />
       ) : (
-        <StepExplanation title="Press Next to add terminals one at a time, or Show All for the final sets." />
+        <StepExplanation kicker="Not started" title="Press Next to add terminals one at a time, or Show all for the final sets." />
       )}
 
       {stepper.shown > 0 && (

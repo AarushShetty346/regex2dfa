@@ -1,0 +1,73 @@
+ RUN  v5.0.3 /home/claude/regex2dfa
+ ✓ src/algorithms/operator-precedence/validate.test.ts > validateOperatorGrammar > accepts the valid sample 3ms
+ ✓ src/algorithms/operator-precedence/validate.test.ts > validateOperatorGrammar > accepts the ambiguous sample (it is an operator grammar, just not an OPG) 1ms
+ ✓ src/algorithms/operator-precedence/validate.test.ts > validateOperatorGrammar > rejects adjacent non-terminals and names the production and pair 1ms
+ ✓ src/algorithms/operator-precedence/validate.test.ts > validateOperatorGrammar > rejects ε-productions and names the production 1ms
+ ✓ src/algorithms/operator-precedence/validate.test.ts > validateOperatorGrammar > treats "epsilon" and an empty alternative the same as ε 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > accepts "id + id * id" 2ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > accepts "( id + id ) * id" 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > rejects "id id" because id/id has no relation 1ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > rejects "id + * id" (handle "* F" matches no production) 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > rejects "( id" because ( and $ have no relation 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > reduces id + id * id in the expected order using skeletal matching 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > includes adjacent non-terminals in the handle and highlights it 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > walks over ≐ when finding the handle ( E ) 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > records relations on the stack for display ($ ⋖ id) 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > rejects unknown tokens before parsing 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString (sample 1) > rejects the empty string 0ms
+ ✓ src/algorithms/operator-precedence/parseString.test.ts > parseString with a conflicted table (sample 4) > refuses to parse and explains why 1ms
+ ✓ src/algorithms/operator-precedence/precedenceTable.test.ts > buildPrecedenceTable (sample 1) > uses terminals plus $ as axes 2ms
+ ✓ src/algorithms/operator-precedence/precedenceTable.test.ts > buildPrecedenceTable (sample 1) > matches the expected table exactly 1ms
+ ✓ src/algorithms/operator-precedence/precedenceTable.test.ts > buildPrecedenceTable (sample 1) > has no conflicts and is a valid operator-precedence grammar 0ms
+ ✓ src/algorithms/operator-precedence/precedenceTable.test.ts > buildPrecedenceTable (sample 1) > adds exactly one relation per step, with a reason 1ms
+ ✓ src/algorithms/operator-precedence/precedenceTable.test.ts > buildPrecedenceTable (sample 1) > snapshots grow monotonically and are independent copies 1ms
+ ✓ src/algorithms/operator-precedence/precedenceTable.test.ts > buildPrecedenceTable conflict detection (sample 4) > is not an operator-precedence grammar 0ms
+ ✓ src/algorithms/operator-precedence/precedenceTable.test.ts > buildPrecedenceTable conflict detection (sample 4) > reports a ⋖/⋗ conflict in cell (+, +) and keeps both relations 1ms
+ ✓ src/algorithms/operator-precedence/precedenceTable.test.ts > buildPrecedenceTable conflict detection (sample 4) > reports a ⋖/⋗ conflict in cell (*, *) and keeps both relations 0ms
+ ✓ src/algorithms/operator-precedence/precedenceTable.test.ts > buildPrecedenceTable conflict detection (sample 4) > flags the conflicting step with the relation it clashed with 1ms
+ ✓ src/algorithms/regex/regex.test.ts > parseRegex > respects precedence: star > concat > union 2ms
+ ✓ src/algorithms/regex/regex.test.ts > parseRegex > ignores whitespace and supports ε and escapes 1ms
+ ✓ src/algorithms/regex/regex.test.ts > parseRegex > rejects "" at position 0 0ms
+ ✓ src/algorithms/regex/regex.test.ts > parseRegex > rejects "(ab" at position 3 0ms
+ ✓ src/algorithms/regex/regex.test.ts > parseRegex > rejects "ab)" at position 2 0ms
+ ✓ src/algorithms/regex/regex.test.ts > parseRegex > rejects "a||b" at position 2 0ms
+ ✓ src/algorithms/regex/regex.test.ts > parseRegex > rejects "*a" at position 0 0ms
+ ✓ src/algorithms/regex/regex.test.ts > parseRegex > rejects "(|a)" at position 1 0ms
+ ✓ src/algorithms/regex/regex.test.ts > parseRegex > rejects "a\\" at position 1 0ms
+ ✓ src/algorithms/regex/regex.test.ts > Dragon Book example (a|b)*abb > builds the 11-state Thompson NFA numbered 0..10 1ms
+ ✓ src/algorithms/regex/regex.test.ts > Dragon Book example (a|b)*abb > subset construction gives states A..E as in the book 1ms
+ ✓ src/algorithms/regex/regex.test.ts > Dragon Book example (a|b)*abb > minimization merges A and C into 4 states 0ms
+ ✓ src/algorithms/regex/regex.test.ts > Dragon Book example (a|b)*abb > every Thompson step only grows the NFA 1ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > a: NFA, DFA and minimal DFA agree with RegExp 8ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > ab|ba: NFA, DFA and minimal DFA agree with RegExp 51ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > (a|b)*abb: NFA, DFA and minimal DFA agree with RegExp 26ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > a*b*: NFA, DFA and minimal DFA agree with RegExp 16ms
+ ✓ src/algorithms/grammar/parseGrammar.test.ts > parseGrammar > parses the valid sample with start symbol, terminals and productions 3ms
+ ✓ src/algorithms/grammar/parseGrammar.test.ts > parseGrammar > accepts the unicode arrow and merges repeated left-hand sides 1ms
+ ✓ src/algorithms/grammar/parseGrammar.test.ts > parseGrammar > turns ε, epsilon and empty alternatives into empty bodies 0ms
+ ✓ src/algorithms/grammar/parseGrammar.test.ts > parseGrammar > reports a missing arrow 0ms
+ ✓ src/algorithms/grammar/parseGrammar.test.ts > parseGrammar > reports an empty left-hand side 0ms
+ ✓ src/algorithms/grammar/parseGrammar.test.ts > parseGrammar > reports a lowercase or multi-token left-hand side 0ms
+ ✓ src/algorithms/grammar/parseGrammar.test.ts > parseGrammar > reports undefined non-terminals, with a spacing hint for "E+T" 0ms
+ ✓ src/algorithms/grammar/parseGrammar.test.ts > parseGrammar > rejects the reserved $ symbol and empty input 0ms
+ ✓ src/algorithms/operator-precedence/leadingTrailing.test.ts > computeLeadingTrailing (sample 1) > computes the expected Leading sets 2ms
+ ✓ src/algorithms/operator-precedence/leadingTrailing.test.ts > computeLeadingTrailing (sample 1) > computes the expected Trailing sets 1ms
+ ✓ src/algorithms/operator-precedence/leadingTrailing.test.ts > computeLeadingTrailing (sample 1) > adds exactly one terminal per "add" step, and every add is recorded once 2ms
+ ✓ src/algorithms/operator-precedence/leadingTrailing.test.ts > computeLeadingTrailing (sample 1) > records the production and rule behind each step 1ms
+ ✓ src/algorithms/operator-precedence/leadingTrailing.test.ts > computeLeadingTrailing (sample 1) > ends each phase with a fixed-point step (Leading before Trailing) 0ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > (ab)*: NFA, DFA and minimal DFA agree with RegExp 11ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > a+b?: NFA, DFA and minimal DFA agree with RegExp 12ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > (a|ε)b: NFA, DFA and minimal DFA agree with RegExp 12ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > ((a|b)(a|b))*: NFA, DFA and minimal DFA agree with RegExp 13ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > (a*|b*)*: NFA, DFA and minimal DFA agree with RegExp 15ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > a(b|c)*d+: NFA, DFA and minimal DFA agree with RegExp 199ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > (0|1(01*0)*1)*: NFA, DFA and minimal DFA agree with RegExp 16ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > ε: NFA, DFA and minimal DFA agree with RegExp 1ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > a??: NFA, DFA and minimal DFA agree with RegExp 2ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > (a|b)*a(a|b)(a|b): NFA, DFA and minimal DFA agree with RegExp 18ms
+ ✓ src/algorithms/regex/regex.test.ts > language equivalence against JS RegExp > minimal DFA sizes match known values 1ms
+ ✓ src/algorithms/regex/regex.test.ts > simulate > reports where a run gets stuck 0ms
+ Test Files  6 passed (6)
+      Tests  68 passed (68)
+   Start at  16:52:45
+   Duration  784ms (transform 46%, tests 42%, import 10%, worker 2%)

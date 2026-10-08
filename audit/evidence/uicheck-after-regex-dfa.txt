@@ -1,0 +1,4 @@
+# http://localhost:4802/regex2dfa/#/regex-dfa (light)
+## 360px: overflow 0px | contrast 1 | targets<44 24 (<24: 1) | widows 15 | control_heights 1 | near_miss_edges 1 | census: 4 radii ['12px', '50%', '6px', '8px'], 2 shadows, 6 font sizes, 2 families, section paddings ['0px']
+## 768px: overflow 0px | contrast 1 | targets<44 24 (<24: 1) | widows 15 | control_heights 1 | near_miss_edges 1 | census: 4 radii ['12px', '50%', '6px', '8px'], 2 shadows, 6 font sizes, 2 families, section paddings ['0px']
+## 1280px: overflow 0px | contrast 1 | targets<44 28 (<24: 1) | widows 15 | control_heights 1 | focus_invisible 0 | census: 5 radii ['12px', '4px', '50%', '6px', '8px'], 2 shadows, 7 font sizes, 2 families, section paddings ['0px']

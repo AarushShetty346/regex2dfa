@@ -28,7 +28,7 @@ export default function PrecedenceTableView({ result }: Props) {
       </p>
       <StepController stepper={stepper} label="Precedence table steps" />
 
-      <div className="table-scroll">
+      <div className="table-scroll" tabIndex={0} aria-label="Precedence table" data-lenis-prevent>
         <table className="prec-table">
           <thead>
             <tr>
@@ -88,7 +88,7 @@ export default function PrecedenceTableView({ result }: Props) {
           )}
         </StepExplanation>
       ) : (
-        <StepExplanation title="Press Next to add one relation at a time, or Show All for the full table." />
+        <StepExplanation kicker="Not started" title="Press Next to add one relation at a time, or Show all for the full table." />
       )}
 
       {(stepper.atEnd || conflictsSoFar.length > 0) && (

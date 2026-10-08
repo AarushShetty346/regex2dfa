@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { EPSILON, type Pipeline, type RegexNode } from '../../algorithms/regex';
-import AutomatonGraph from '../../components/graph/AutomatonGraph';
+import GraphFrame from '../../components/graph/GraphFrame';
 import type { GraphEdge, GraphNode } from '../../components/graph/layout';
 import { StageLayout, StepCard } from './shared';
 
@@ -34,7 +34,20 @@ export default function TreeStage({ pipeline }: { pipeline: Pipeline }) {
 
   return (
     <StageLayout
-      canvas={<AutomatonGraph nodes={graph.nodes} edges={graph.edges} direction="tree" label="Syntax tree of the regular expression" maxScale={1} />}
+      canvas={
+        <GraphFrame
+          nodes={graph.nodes}
+          edges={graph.edges}
+          direction="tree"
+          label="Syntax tree of the regular expression"
+          maxScale={1}
+          caption={
+            <>
+              Syntax tree <span className="muted">· • is concatenation</span>
+            </>
+          }
+        />
+      }
       rail={
         <>
           <StepCard

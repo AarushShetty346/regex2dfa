@@ -1,0 +1,4 @@
+# http://localhost:4802/regex2dfa/#/home (light)
+## 360px: overflow 0px | targets<44 9 (<24: 1) | text over gradient/image 12 (check by eye) | census: 5 radii ['12px', '4px', '50%', '6px', '8px'], 2 shadows, 7 font sizes, 2 families, section paddings ['0px']
+## 768px: overflow 0px | targets<44 9 (<24: 1) | widows 1 | text over gradient/image 12 (check by eye) | census: 5 radii ['12px', '4px', '50%', '6px', '8px'], 2 shadows, 7 font sizes, 2 families, section paddings ['0px']
+## 1280px: overflow 0px | targets<44 13 (<24: 1) | text over gradient/image 12 (check by eye) | focus_invisible 0 | census: 5 radii ['12px', '4px', '50%', '6px', '8px'], 2 shadows, 7 font sizes, 2 families, section paddings ['0px']

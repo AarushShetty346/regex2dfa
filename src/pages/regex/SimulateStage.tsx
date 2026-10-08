@@ -1,7 +1,7 @@
 import { useId, useMemo, useState } from 'react';
 import { CheckCircle, XCircle } from '@phosphor-icons/react';
 import { simulate, type DFA } from '../../algorithms/regex';
-import AutomatonGraph from '../../components/graph/AutomatonGraph';
+import GraphFrame, { LegendItem } from '../../components/graph/GraphFrame';
 import type { GraphEdge, GraphNode, NodeTone } from '../../components/graph/layout';
 import StepController from '../../components/stepper/StepController';
 import { useStepper } from '../../components/stepper/useStepper';
@@ -96,47 +96,74 @@ export default function SimulateStage({ dfa }: { dfa: DFA }) {
 
   return (
     <StageLayout
-      canvas={<AutomatonGraph nodes={graph.nodes} edges={graph.edges} label="Minimal DFA running on the test string" />}
+      canvas={
+        <GraphFrame
+          nodes={graph.nodes}
+          edges={graph.edges}
+          label="Minimal DFA running on the test string"
+          caption={
+            <>
+              Minimal DFA <span className="muted">· current state {name(current)}</span>
+            </>
+          }
+          legend={
+            <>
+              <LegendItem kind="focus">current state</LegendItem>
+              <LegendItem kind="new">edge just taken</LegendItem>
+              <LegendItem kind="accept">accepting</LegendItem>
+            </>
+          }
+        />
+      }
       controller={<StepController stepper={stepper} label="Simulation steps" keyboard />}
       rail={
         <>
-          <div className="field">
-            <label htmlFor={inputId}>Test string</label>
-            <input
-              id={inputId}
-              className="mono text-input"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              spellCheck={false}
-              autoComplete="off"
-              placeholder="empty string"
-            />
-            <div className="chips" aria-label="Example strings">
-              {examples.map((ex) => (
-                <button type="button" key={ex} className="chip mono" onClick={() => setInput(ex)}>
-                  {ex === '' ? 'ε' : ex}
-                </button>
-              ))}
+          <section className="tester" aria-label="String tester">
+            <div className="field">
+              <label htmlFor={inputId} className="field-label">
+                Test string
+              </label>
+              <input
+                id={inputId}
+                className="mono text-input"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                spellCheck={false}
+                autoComplete="off"
+                placeholder="empty string"
+              />
+              <div className="chips" role="group" aria-label="Example strings">
+                {examples.map((ex) => (
+                  <button type="button" key={ex} className="chip mono" onClick={() => setInput(ex)}>
+                    {ex === '' ? 'ε' : ex}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="tape" aria-label="Input tape">
-            {chars.length === 0 && <span className="tape-cell tape-empty mono">ε</span>}
-            {chars.map((c, i) => {
-              const state = !last ? 'todo' : i < last.index ? 'read' : i === last.index ? (last.to === null ? 'fail' : 'current') : 'todo';
-              return (
-                <span key={i} className={`tape-cell mono ${state}`}>
-                  {c === ' ' ? '␣' : c}
-                </span>
-              );
-            })}
-          </div>
+            <div className="tape-block">
+              <span className="field-label" aria-hidden>
+                Input tape
+              </span>
+              <div className="tape" role="group" aria-label="Input tape">
+                {chars.length === 0 && <span className="tape-cell tape-empty mono">ε</span>}
+                {chars.map((c, i) => {
+                  const state = !last ? 'todo' : i < last.index ? 'read' : i === last.index ? (last.to === null ? 'fail' : 'current') : 'todo';
+                  return (
+                    <span key={i} className={`tape-cell mono ${state}`}>
+                      {c === ' ' ? '␣' : c}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
 
           <StepCard kicker={card.kicker} title={card.title} detail={card.detail} />
 
           {(done || stuck) && (
             <p className={`verdict ${run.accepted ? 'ok' : 'error'}`} role="status">
-              {run.accepted ? <CheckCircle size={20} weight="fill" /> : <XCircle size={20} weight="fill" />}
+              {run.accepted ? <CheckCircle size={20} weight="fill" aria-hidden /> : <XCircle size={20} weight="fill" aria-hidden />}
               {run.accepted ? 'Accepted' : 'Rejected'}
             </p>
           )}

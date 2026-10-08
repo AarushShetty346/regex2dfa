@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { DFA, MinimizeResult } from '../../algorithms/regex';
-import AutomatonGraph from '../../components/graph/AutomatonGraph';
+import GraphFrame, { LegendItem } from '../../components/graph/GraphFrame';
 import type { GraphEdge, GraphNode } from '../../components/graph/layout';
 import StepController from '../../components/stepper/StepController';
 import { useStepper } from '../../components/stepper/useStepper';
@@ -73,11 +73,28 @@ export default function MinimizeStage({ result, dfa }: { result: MinimizeResult;
   return (
     <StageLayout
       canvas={
-        <AutomatonGraph
+        <GraphFrame
           key={step?.minimal ? 'minimal' : 'original'}
           nodes={graph.nodes}
           edges={graph.edges}
           label={step?.minimal ? 'Minimal DFA' : 'DFA coloured by partition group'}
+          caption={
+            step?.minimal ? (
+              <>
+                Minimal DFA <span className="muted">· {graph.nodes.length} states</span>
+              </>
+            ) : (
+              <>
+                DFA from subset construction <span className="muted">· fill = partition group</span>
+              </>
+            )
+          }
+          legend={
+            <>
+              <LegendItem kind="start">start</LegendItem>
+              <LegendItem kind="accept">accepting</LegendItem>
+            </>
+          }
         />
       }
       controller={<StepController stepper={stepper} label="Minimization steps" keyboard />}
@@ -104,7 +121,7 @@ export default function MinimizeStage({ result, dfa }: { result: MinimizeResult;
           )}
 
           {step?.signatures && (
-            <div className="table-wrap" data-lenis-prevent>
+            <div className="table-wrap" data-lenis-prevent tabIndex={0} aria-label="Signature table">
               <table className="dtran">
                 <caption>Where each symbol leads, using the groups from before this round</caption>
                 <thead>

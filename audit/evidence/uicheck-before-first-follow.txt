@@ -1,0 +1,4 @@
+# http://localhost:4801/regex2dfa/#/first-follow (light)
+## 360px: overflow 0px | targets<44 6 (<24: 0) | names 6 | pad_asymmetry 1 | census: 2 radii ['14px', '9px'], 0 shadows, 3 font sizes, 1 families, section paddings ['20px']
+## 768px: overflow 0px | contrast 2 | targets<44 5 (<24: 0) | small_text 2 | pad_asymmetry 1 | census: 3 radii ['14px', '999px', '9px'], 0 shadows, 6 font sizes, 1 families, section paddings ['20px']
+## 1280px: overflow 0px | contrast 2 | targets<44 5 (<24: 0) | small_text 2 | pad_asymmetry 1 | focus_invisible 0 | census: 3 radii ['14px', '999px', '9px'], 0 shadows, 6 font sizes, 1 families, section paddings ['20px']
