@@ -120,12 +120,12 @@ export default function HomePage() {
           </p>
           <div className="hero-actions" data-hero>
             <a className="button hero-cta" href="#/regex-dfa">
-              Open Regex to DFA
-              <ArrowRight size={16} weight="bold" />
+              <span>Open Regex to DFA</span>
+              <ArrowRight size={16} weight="bold" aria-hidden />
             </a>
             <a className="button hero-cta" href="#/bottom-up">
-              Open Bottom-up parsing
-              <ArrowRight size={16} weight="bold" />
+              <span>Open Bottom-up parsing</span>
+              <ArrowRight size={16} weight="bold" aria-hidden />
             </a>
           </div>
         </div>
