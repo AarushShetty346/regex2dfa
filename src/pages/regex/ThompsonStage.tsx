@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { ThompsonResult } from '../../algorithms/regex';
-import AutomatonGraph from '../../components/graph/AutomatonGraph';
+import GraphFrame, { LegendItem } from '../../components/graph/GraphFrame';
 import type { GraphEdge, GraphNode } from '../../components/graph/layout';
 import StepController from '../../components/stepper/StepController';
 import { useStepper } from '../../components/stepper/useStepper';
@@ -40,7 +40,17 @@ export default function ThompsonStage({ result, postfix }: { result: ThompsonRes
     <StageLayout
       canvas={
         graph ? (
-          <AutomatonGraph nodes={graph.nodes} edges={graph.edges} label={`Thompson NFA after step ${stepper.shown}`} />
+          <GraphFrame
+            nodes={graph.nodes}
+            edges={graph.edges}
+            label={`Thompson NFA after step ${stepper.shown}`}
+            caption={
+              <>
+                Thompson NFA <span className="muted">· after step {stepper.shown}</span>
+              </>
+            }
+            legend={<Legend />}
+          />
         ) : (
           <EmptyCanvas
             title="Nothing built yet"
@@ -64,7 +74,6 @@ export default function ThompsonStage({ result, postfix }: { result: ThompsonRes
               detail="Each symbol becomes a two-state machine. Union, concatenation and the repetition operators glue smaller machines together with ε-edges, bottom-up through the syntax tree."
             />
           )}
-          <Legend />
           <StepList
             items={steps.map((s) => ({ title: <span className="mono">{s.text}</span>, meta: s.title }))}
             shown={stepper.shown}
@@ -78,16 +87,12 @@ export default function ThompsonStage({ result, postfix }: { result: ThompsonRes
 
 function Legend() {
   return (
-    <div className="graph-legend" aria-label="Legend">
-      <span>
-        <i className="swatch swatch-new" /> added this step
-      </span>
-      <span>
-        <i className="swatch swatch-focus" /> current fragment
-      </span>
-      <span>
-        <i className="swatch swatch-eps" /> ε-edge
-      </span>
-    </div>
+    <>
+      <LegendItem kind="new">added this step</LegendItem>
+      <LegendItem kind="focus">current fragment</LegendItem>
+      <LegendItem kind="muted">earlier fragments</LegendItem>
+      <LegendItem kind="eps">ε-edge</LegendItem>
+      <LegendItem kind="accept">accepting</LegendItem>
+    </>
   );
 }

@@ -1,0 +1,2157 @@
+{
+ "regex": {
+  "a": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "a"
+      ],
+      "edges": []
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "1"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1(acc)"
+      ],
+      "edges": [
+       "a"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 1
+   },
+   "Subset construction": {
+    "steps": [
+     "3"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B(acc)"
+      ],
+      "edges": [
+       "a"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1(acc)"
+      ],
+      "edges": [
+       "a"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a",
+      "A | {0} | B",
+      "B | {1} | -"
+     ]
+    ],
+    "step_items": 3
+   },
+   "Minimize": {
+    "steps": [
+     "3"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B(acc)"
+      ],
+      "edges": [
+       "a"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 3
+   }
+  },
+  "ab": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "a",
+       "b",
+       "•"
+      ],
+      "edges": [
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "3"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2(acc)"
+      ],
+      "edges": [
+       "a",
+       "b"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 3
+   },
+   "Subset construction": {
+    "steps": [
+     "7"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B",
+       "C(acc)"
+      ],
+      "edges": [
+       "a",
+       "b"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2(acc)"
+      ],
+      "edges": [
+       "a",
+       "b"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a | b",
+      "A | {0} | B | -",
+      "B | {1} | - | C",
+      "C | {2} | - | -"
+     ]
+    ],
+    "step_items": 7
+   },
+   "Minimize": {
+    "steps": [
+     "4"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B",
+       "C(acc)"
+      ],
+      "edges": [
+       "a",
+       "b"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 4
+   }
+  },
+  "a|b": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "a",
+       "b",
+       "|"
+      ],
+      "edges": [
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "3"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5(acc)"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 3
+   },
+   "Subset construction": {
+    "steps": [
+     "7"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B(acc)",
+       "C(acc)"
+      ],
+      "edges": [
+       "a",
+       "b"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5(acc)"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a | b",
+      "A | {0, 1, 3} | B | C",
+      "B | {2, 5} | - | -",
+      "C | {4, 5} | - | -"
+     ]
+    ],
+    "step_items": 7
+   },
+   "Minimize": {
+    "steps": [
+     "3"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "BC(acc)"
+      ],
+      "edges": [
+       "a, b"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 3
+   }
+  },
+  "a*": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "*",
+       "a"
+      ],
+      "edges": [
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "2"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3(acc)"
+      ],
+      "edges": [
+       "a",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 2
+   },
+   "Subset construction": {
+    "steps": [
+     "3"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(acc)(start)",
+       "B(acc)"
+      ],
+      "edges": [
+       "a",
+       "a"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3(acc)"
+      ],
+      "edges": [
+       "a",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a",
+      "A | {0, 1, 3} | B",
+      "B | {1, 2, 3} | B"
+     ]
+    ],
+    "step_items": 3
+   },
+   "Minimize": {
+    "steps": [
+     "3"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "AB(acc)(start)"
+      ],
+      "edges": [
+       "a"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 3
+   }
+  },
+  "(a|b)*": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "*",
+       "a",
+       "b",
+       "|"
+      ],
+      "edges": [
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "4"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7(acc)"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 4
+   },
+   "Subset construction": {
+    "steps": [
+     "7"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(acc)(start)",
+       "B(acc)",
+       "C(acc)"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "a",
+       "b",
+       "b",
+       "b"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7(acc)"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a | b",
+      "A | {0, 1, 2, 4, 7} | B | C",
+      "B | {1, 2, 3, 4, 6, 7} | B | C",
+      "C | {1, 2, 4, 5, 6, 7} | B | C"
+     ]
+    ],
+    "step_items": 7
+   },
+   "Minimize": {
+    "steps": [
+     "3"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "ABC(acc)(start)"
+      ],
+      "edges": [
+       "a, b"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 3
+   }
+  },
+  "a(b|c)*": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "*",
+       "a",
+       "b",
+       "c",
+       "|",
+       "•"
+      ],
+      "edges": [
+       "",
+       "",
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "6"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8(acc)"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "c",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 6
+   },
+   "Subset construction": {
+    "steps": [
+     "13"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B(acc)",
+       "C(acc)",
+       "D(acc)"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "b",
+       "b",
+       "c",
+       "c",
+       "c"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8(acc)"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "c",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a | b | c",
+      "A | {0} | B | - | -",
+      "B | {1, 2, 3, 5, 8} | - | C | D",
+      "C | {2, 3, 4, 5, 7, 8} | - | C | D",
+      "D | {2, 3, 5, 6, 7, 8} | - | C | D"
+     ]
+    ],
+    "step_items": 13
+   },
+   "Minimize": {
+    "steps": [
+     "3"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "BCD(acc)"
+      ],
+      "edges": [
+       "a",
+       "b, c"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 3
+   }
+  },
+  "(a|b)*abb": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "*",
+       "a",
+       "a",
+       "b",
+       "b",
+       "b",
+       "|",
+       "•",
+       "•",
+       "•"
+      ],
+      "edges": [
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "10"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "b",
+       "b",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 10
+   },
+   "Subset construction": {
+    "steps": [
+     "11"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B",
+       "C",
+       "D",
+       "E(acc)"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "a",
+       "a",
+       "a",
+       "b",
+       "b",
+       "b",
+       "b",
+       "b"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "b",
+       "b",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a | b",
+      "A | {0, 1, 2, 4, 7} | B | C",
+      "B | {1, 2, 3, 4, 6, 7, 8} | B | D",
+      "C | {1, 2, 4, 5, 6, 7} | B | C",
+      "D | {1, 2, 4, 5, 6, 7, 9} | B | E",
+      "E | {1, 2, 4, 5, 6, 7, 10} | B | C"
+     ]
+    ],
+    "step_items": 11
+   },
+   "Minimize": {
+    "steps": [
+     "5"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "AC(start)",
+       "B",
+       "D",
+       "E(acc)"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "a",
+       "a",
+       "b",
+       "b",
+       "b",
+       "b"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 5
+   }
+  },
+  "a(b|c)*d+": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "*",
+       "+",
+       "a",
+       "b",
+       "c",
+       "d",
+       "|",
+       "•",
+       "•"
+      ],
+      "edges": [
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "9"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10",
+       "11(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "c",
+       "d",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 9
+   },
+   "Subset construction": {
+    "steps": [
+     "21"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B",
+       "C",
+       "D",
+       "E(acc)"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "b",
+       "b",
+       "c",
+       "c",
+       "c",
+       "d",
+       "d",
+       "d",
+       "d"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10",
+       "11(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "a",
+       "b",
+       "c",
+       "d",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a | b | c | d",
+      "A | {0} | B | - | - | -",
+      "B | {1, 2, 3, 5, 8, 9} | - | C | D | E",
+      "C | {2, 3, 4, 5, 7, 8, 9} | - | C | D | E",
+      "D | {2, 3, 5, 6, 7, 8, 9} | - | C | D | E",
+      "E | {9, 10, 11} | - | - | - | E"
+     ]
+    ],
+    "step_items": 21
+   },
+   "Minimize": {
+    "steps": [
+     "4"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "BCD",
+       "E(acc)"
+      ],
+      "edges": [
+       "a",
+       "b, c",
+       "d",
+       "d"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 4
+   }
+  },
+  "(0|1(01*0)*1)*": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "*",
+       "*",
+       "*",
+       "0",
+       "0",
+       "0",
+       "1",
+       "1",
+       "1",
+       "|",
+       "•",
+       "•",
+       "•",
+       "•"
+      ],
+      "edges": [
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "14"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10",
+       "11",
+       "12",
+       "13",
+       "14",
+       "15(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "0",
+       "0",
+       "0",
+       "1",
+       "1",
+       "1",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 14
+   },
+   "Subset construction": {
+    "steps": [
+     "15"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(acc)(start)",
+       "B(acc)",
+       "C",
+       "D",
+       "E(acc)",
+       "F",
+       "G"
+      ],
+      "edges": [
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "1",
+       "1",
+       "1",
+       "1",
+       "1",
+       "1",
+       "1"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10",
+       "11",
+       "12",
+       "13",
+       "14",
+       "15(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "0",
+       "0",
+       "0",
+       "1",
+       "1",
+       "1",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | 0 | 1",
+      "A | {0, 1, 2, 4, 15} | B | C",
+      "B | {1, 2, 3, 4, 14, 15} | B | C",
+      "C | {5, 6, 12} | D | E",
+      "D | {7, 8, 10} | F | G",
+      "E | {1, 2, 4, 13, 14, 15} | B | C",
+      "F | {6, 11, 12} | D | E",
+      "G | {8, 9, 10} | F | G"
+     ]
+    ],
+    "step_items": 15
+   },
+   "Minimize": {
+    "steps": [
+     "4"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "ABE(acc)(start)",
+       "CF",
+       "DG"
+      ],
+      "edges": [
+       "0",
+       "0",
+       "0",
+       "1",
+       "1",
+       "1"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 4
+   }
+  },
+  "(ab|ba)?c*": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "*",
+       "?",
+       "a",
+       "a",
+       "b",
+       "b",
+       "c",
+       "|",
+       "•",
+       "•",
+       "•"
+      ],
+      "edges": [
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "11"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10",
+       "11",
+       "12(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "b",
+       "c",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 11
+   },
+   "Subset construction": {
+    "steps": [
+     "19"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(acc)(start)",
+       "B",
+       "C",
+       "D(acc)",
+       "E(acc)",
+       "F(acc)"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "b",
+       "c",
+       "c",
+       "c",
+       "c"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10",
+       "11",
+       "12(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "b",
+       "c",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a | b | c",
+      "A | {0, 1, 2, 5, 9, 10, 12} | B | C | D",
+      "B | {3} | - | E | -",
+      "C | {6} | F | - | -",
+      "D | {10, 11, 12} | - | - | D",
+      "E | {4, 8, 9, 10, 12} | - | - | D",
+      "F | {7, 8, 9, 10, 12} | - | - | D"
+     ]
+    ],
+    "step_items": 19
+   },
+   "Minimize": {
+    "steps": [
+     "4"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(acc)(start)",
+       "B",
+       "C",
+       "DEF(acc)"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "b",
+       "c",
+       "c"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 4
+   }
+  },
+  "(a|ε)b+a?": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "+",
+       "?",
+       "a",
+       "a",
+       "b",
+       "|",
+       "ε",
+       "•",
+       "•"
+      ],
+      "edges": [
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "9"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10",
+       "11(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 9
+   },
+   "Subset construction": {
+    "steps": [
+     "9"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B",
+       "C(acc)",
+       "D(acc)"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "b",
+       "b"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "10",
+       "11(acc)",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε",
+       "ε"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | a | b",
+      "A | {0, 1, 3, 4, 5, 6} | B | C",
+      "B | {2, 5, 6} | - | C",
+      "C | {6, 7, 8, 9, 11} | D | C",
+      "D | {10, 11} | - | -"
+     ]
+    ],
+    "step_items": 9
+   },
+   "Minimize": {
+    "steps": [
+     "4"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B",
+       "C(acc)",
+       "D(acc)"
+      ],
+      "edges": [
+       "a",
+       "a",
+       "b",
+       "b",
+       "b"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 4
+   }
+  },
+  "a\\*b": {
+   "Syntax tree": {
+    "steps": [],
+    "graphs": [
+     {
+      "nodes": [
+       "*",
+       "a",
+       "b",
+       "•",
+       "•"
+      ],
+      "edges": [
+       "",
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 0
+   },
+   "Thompson NFA": {
+    "steps": [
+     "5"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3(acc)"
+      ],
+      "edges": [
+       "*",
+       "a",
+       "b"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 5
+   },
+   "Subset construction": {
+    "steps": [
+     "13"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B",
+       "C",
+       "D(acc)"
+      ],
+      "edges": [
+       "*",
+       "a",
+       "b"
+      ]
+     },
+     {
+      "nodes": [
+       "0(start)",
+       "1",
+       "2",
+       "3(acc)"
+      ],
+      "edges": [
+       "*",
+       "a",
+       "b"
+      ]
+     }
+    ],
+    "tables": [
+     [
+      "State | NFA states | * | a | b",
+      "A | {0} | - | B | -",
+      "B | {1} | C | - | -",
+      "C | {2} | - | - | D",
+      "D | {3} | - | - | -"
+     ]
+    ],
+    "step_items": 13
+   },
+   "Minimize": {
+    "steps": [
+     "4"
+    ],
+    "graphs": [
+     {
+      "nodes": [
+       "A(start)",
+       "B",
+       "C",
+       "D(acc)"
+      ],
+      "edges": [
+       "*",
+       "a",
+       "b"
+      ]
+     }
+    ],
+    "tables": [],
+    "step_items": 4
+   }
+  }
+ },
+ "invalid": {
+  "": {
+   "aria_invalid": "true",
+   "alert": "Enter a regular expression. (at character 1)"
+  },
+  "(a": {
+   "aria_invalid": "true",
+   "alert": "Missing ')' for the '(' at character 1."
+  },
+  "a|": {
+   "aria_invalid": "true",
+   "alert": "Expression ends where an operand was expected. (at character 3)"
+  },
+  "*a": {
+   "aria_invalid": "true",
+   "alert": "'*' has nothing to apply to. (at character 1)"
+  },
+  ")": {
+   "aria_invalid": "true",
+   "alert": "Empty operand before ')'. Use ε for the empty string. (at character 1)"
+  },
+  "a\\": {
+   "aria_invalid": "true",
+   "alert": "Trailing backslash: escape what? (at character 2)"
+  },
+  "(a|b": {
+   "aria_invalid": "true",
+   "alert": "Missing ')' for the '(' at character 1."
+  },
+  "a||b": {
+   "aria_invalid": "true",
+   "alert": "Empty operand before '|'. Use ε for the empty string. (at character 3)"
+  }
+ },
+ "strings": {
+  "a": {
+   "": "Rejected",
+   "a": "Accepted",
+   "aaa": "Rejected",
+   "b": "Rejected",
+   "ab": "Rejected",
+   "abb": "Rejected",
+   "babb": "Rejected",
+   "abc": "Rejected",
+   "ba": "Rejected",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "ab": {
+   "": "Rejected",
+   "a": "Rejected",
+   "aaa": "Rejected",
+   "b": "Rejected",
+   "ab": "Accepted",
+   "abb": "Rejected",
+   "babb": "Rejected",
+   "abc": "Rejected",
+   "ba": "Rejected",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "a|b": {
+   "": "Rejected",
+   "a": "Accepted",
+   "aaa": "Rejected",
+   "b": "Accepted",
+   "ab": "Rejected",
+   "abb": "Rejected",
+   "babb": "Rejected",
+   "abc": "Rejected",
+   "ba": "Rejected",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "a*": {
+   "": "Accepted",
+   "a": "Accepted",
+   "aaa": "Accepted",
+   "b": "Rejected",
+   "ab": "Rejected",
+   "abb": "Rejected",
+   "babb": "Rejected",
+   "abc": "Rejected",
+   "ba": "Rejected",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "(a|b)*": {
+   "": "Accepted",
+   "a": "Accepted",
+   "aaa": "Accepted",
+   "b": "Accepted",
+   "ab": "Accepted",
+   "abb": "Accepted",
+   "babb": "Accepted",
+   "abc": "Rejected",
+   "ba": "Accepted",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "a(b|c)*": {
+   "": "Rejected",
+   "a": "Accepted",
+   "aaa": "Rejected",
+   "b": "Rejected",
+   "ab": "Accepted",
+   "abb": "Accepted",
+   "babb": "Rejected",
+   "abc": "Accepted",
+   "ba": "Rejected",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "(a|b)*abb": {
+   "": "Rejected",
+   "a": "Rejected",
+   "aaa": "Rejected",
+   "b": "Rejected",
+   "ab": "Rejected",
+   "abb": "Accepted",
+   "babb": "Accepted",
+   "abc": "Rejected",
+   "ba": "Rejected",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "a(b|c)*d+": {
+   "": "Rejected",
+   "a": "Rejected",
+   "aaa": "Rejected",
+   "b": "Rejected",
+   "ab": "Rejected",
+   "abb": "Rejected",
+   "babb": "Rejected",
+   "abc": "Rejected",
+   "ba": "Rejected",
+   "bd": "Rejected",
+   "acd": "Accepted",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "(0|1(01*0)*1)*": {
+   "": "Accepted",
+   "a": "Rejected",
+   "aaa": "Rejected",
+   "b": "Rejected",
+   "ab": "Rejected",
+   "abb": "Rejected",
+   "babb": "Rejected",
+   "abc": "Rejected",
+   "ba": "Rejected",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Accepted",
+   "x": "Rejected"
+  },
+  "(ab|ba)?c*": {
+   "": "Accepted",
+   "a": "Rejected",
+   "aaa": "Rejected",
+   "b": "Rejected",
+   "ab": "Accepted",
+   "abb": "Rejected",
+   "babb": "Rejected",
+   "abc": "Accepted",
+   "ba": "Accepted",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Accepted",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "(a|ε)b+a?": {
+   "": "Rejected",
+   "a": "Rejected",
+   "aaa": "Rejected",
+   "b": "Accepted",
+   "ab": "Accepted",
+   "abb": "Accepted",
+   "babb": "Rejected",
+   "abc": "Rejected",
+   "ba": "Accepted",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  },
+  "a\\*b": {
+   "": "Rejected",
+   "a": "Rejected",
+   "aaa": "Rejected",
+   "b": "Rejected",
+   "ab": "Rejected",
+   "abb": "Rejected",
+   "babb": "Rejected",
+   "abc": "Rejected",
+   "ba": "Rejected",
+   "bd": "Rejected",
+   "acd": "Rejected",
+   "c": "Rejected",
+   "0110": "Rejected",
+   "x": "Rejected"
+  }
+ },
+ "stepper": [
+  [
+   "next",
+   "1"
+  ],
+  [
+   "next",
+   "2"
+  ],
+  [
+   "next",
+   "3"
+  ],
+  [
+   "prev",
+   "2"
+  ],
+  [
+   "showall",
+   "10"
+  ],
+  [
+   "reset",
+   "0"
+  ],
+  [
+   "key-right",
+   "1"
+  ],
+  [
+   "key-end",
+   "10"
+  ],
+  [
+   "key-left",
+   "9"
+  ],
+  [
+   "key-home",
+   "0"
+  ]
+ ],
+ "bottom_up": {
+  "valid-expr": {
+   "id + id * id": {
+    "tables": [
+     [
+      "Non-terminal | Leading | Trailing",
+      "E | { +, *, (, id } | { +, *, ), id }",
+      "T | { *, (, id } | { *, ), id }",
+      "F | { (, id } | { ), id }"
+     ],
+     [
+      "stack \\ input | + | * | ( | ) | id | $",
+      "+ | ⋗ | ⋖ | ⋖ | ⋗ | ⋖ | ⋗",
+      "* | ⋗ | ⋗ | ⋖ | ⋗ | ⋖ | ⋗",
+      "( | ⋖ | ⋖ | ⋖ | ≐ | ⋖ | ",
+      ") | ⋗ | ⋗ |  | ⋗ |  | ⋗",
+      "id | ⋗ | ⋗ |  | ⋗ |  | ⋗",
+      "$ | ⋖ | ⋖ | ⋖ |  | ⋖ | "
+     ],
+     [
+      "Step | Stack | Input | Relation used | Action",
+      "1 | $ ⋖ | id + id * id $ | $ ⋖ id | Shift id",
+      "2 | $ ⋖ id ⋗ | + id * id $ | id ⋗ + | Reduce id by F → id",
+      "3 | $ ⋖ F | + id * id $ | $ ⋖ + | Shift +",
+      "4 | $ ⋖ F + ⋖ | id * id $ | + ⋖ id | Shift id",
+      "5 | $ ⋖ F + ⋖ id ⋗ | * id $ | id ⋗ * | Reduce id by F → id",
+      "6 | $ ⋖ F + ⋖ F | * id $ | + ⋖ * | Shift *",
+      "7 | $ ⋖ F + ⋖ F * ⋖ | id $ | * ⋖ id | Shift id",
+      "8 | $ ⋖ F + ⋖ F * ⋖ id ⋗ | $ | id ⋗ $ | Reduce id by F → id",
+      "9 | $ ⋖ F + ⋖ F * F ⋗ | $ | * ⋗ $ | Reduce F * F by T → T * F",
+      "10 | $ ⋖ F + T ⋗ | $ | + ⋗ $ | Reduce F + T by E → E + T",
+      "11 | $ E | $ | $ · $ | ACCEPT"
+     ]
+    ],
+    "alerts": [
+     "Valid operator-precedence grammar. Every cell holds at most one relation.",
+     "ACCEPT. \"id + id * id\" is in the language."
+    ],
+    "steps": [
+     "20",
+     "29",
+     "11"
+    ]
+   },
+   "id + * id": {
+    "tables": [
+     [
+      "Non-terminal | Leading | Trailing",
+      "E | { +, *, (, id } | { +, *, ), id }",
+      "T | { *, (, id } | { *, ), id }",
+      "F | { (, id } | { ), id }"
+     ],
+     [
+      "stack \\ input | + | * | ( | ) | id | $",
+      "+ | ⋗ | ⋖ | ⋖ | ⋗ | ⋖ | ⋗",
+      "* | ⋗ | ⋗ | ⋖ | ⋗ | ⋖ | ⋗",
+      "( | ⋖ | ⋖ | ⋖ | ≐ | ⋖ | ",
+      ") | ⋗ | ⋗ |  | ⋗ |  | ⋗",
+      "id | ⋗ | ⋗ |  | ⋗ |  | ⋗",
+      "$ | ⋖ | ⋖ | ⋖ |  | ⋖ | "
+     ],
+     [
+      "Step | Stack | Input | Relation used | Action",
+      "1 | $ ⋖ | id + * id $ | $ ⋖ id | Shift id",
+      "2 | $ ⋖ id ⋗ | + * id $ | id ⋗ + | Reduce id by F → id",
+      "3 | $ ⋖ F | + * id $ | $ ⋖ + | Shift +",
+      "4 | $ ⋖ F + ⋖ | * id $ | + ⋖ * | Shift *",
+      "5 | $ ⋖ F + ⋖ * ⋖ | id $ | * ⋖ id | Shift id",
+      "6 | $ ⋖ F + ⋖ * ⋖ id ⋗ | $ | id ⋗ $ | Reduce id by F → id",
+      "7 | $ ⋖ F + ⋖ * F ⋗ | $ | * ⋗ $ | REJECT: The handle \"* F\" has terminal skeleton \"* N\", which matches no production body."
+     ]
+    ],
+    "alerts": [
+     "Valid operator-precedence grammar. Every cell holds at most one relation.",
+     "REJECT. The handle \"* F\" has terminal skeleton \"* N\", which matches no production body."
+    ],
+    "steps": [
+     "20",
+     "29",
+     "7"
+    ]
+   },
+   "( id + id ) * id": {
+    "tables": [
+     [
+      "Non-terminal | Leading | Trailing",
+      "E | { +, *, (, id } | { +, *, ), id }",
+      "T | { *, (, id } | { *, ), id }",
+      "F | { (, id } | { ), id }"
+     ],
+     [
+      "stack \\ input | + | * | ( | ) | id | $",
+      "+ | ⋗ | ⋖ | ⋖ | ⋗ | ⋖ | ⋗",
+      "* | ⋗ | ⋗ | ⋖ | ⋗ | ⋖ | ⋗",
+      "( | ⋖ | ⋖ | ⋖ | ≐ | ⋖ | ",
+      ") | ⋗ | ⋗ |  | ⋗ |  | ⋗",
+      "id | ⋗ | ⋗ |  | ⋗ |  | ⋗",
+      "$ | ⋖ | ⋖ | ⋖ |  | ⋖ | "
+     ],
+     [
+      "Step | Stack | Input | Relation used | Action",
+      "1 | $ ⋖ | ( id + id ) * id $ | $ ⋖ ( | Shift (",
+      "2 | $ ⋖ ( ⋖ | id + id ) * id $ | ( ⋖ id | Shift id",
+      "3 | $ ⋖ ( ⋖ id ⋗ | + id ) * id $ | id ⋗ + | Reduce id by F → id",
+      "4 | $ ⋖ ( ⋖ F | + id ) * id $ | ( ⋖ + | Shift +",
+      "5 | $ ⋖ ( ⋖ F + ⋖ | id ) * id $ | + ⋖ id | Shift id",
+      "6 | $ ⋖ ( ⋖ F + ⋖ id ⋗ | ) * id $ | id ⋗ ) | Reduce id by F → id",
+      "7 | $ ⋖ ( ⋖ F + F ⋗ | ) * id $ | + ⋗ ) | Reduce F + F by E → E + T",
+      "8 | $ ⋖ ( E ≐ | ) * id $ | ( ≐ ) | Shift )",
+      "9 | $ ⋖ ( E ≐ ) ⋗ | * id $ | ) ⋗ * | Reduce ( E ) by F → ( E )",
+      "10 | $ ⋖ F | * id $ | $ ⋖ * | Shift *",
+      "11 | $ ⋖ F * ⋖ | id $ | * ⋖ id | Shift id",
+      "12 | $ ⋖ F * ⋖ id ⋗ | $ | id ⋗ $ | Reduce id by F → id",
+      "13 | $ ⋖ F * F ⋗ | $ | * ⋗ $ | Reduce F * F by T → T * F",
+      "14 | $ T | $ | $ · $ | ACCEPT"
+     ]
+    ],
+    "alerts": [
+     "Valid operator-precedence grammar. Every cell holds at most one relation.",
+     "ACCEPT. \"( id + id ) * id\" is in the language."
+    ],
+    "steps": [
+     "20",
+     "29",
+     "14"
+    ]
+   }
+  },
+  "adjacent-nt": {
+   "id + id * id": {
+    "tables": [],
+    "alerts": [
+     "Not an operator grammar:Invalid: E → E A E has adjacent non-terminals E A."
+    ],
+    "steps": []
+   }
+  },
+  "epsilon": {
+   "id + id * id": {
+    "tables": [],
+    "alerts": [
+     "Not an operator grammar:Invalid: S → ε is an ε-production (operator grammars cannot have empty bodies)."
+    ],
+    "steps": []
+   }
+  },
+  "ambiguous": {
+   "id + id * id": {
+    "tables": [
+     [
+      "Non-terminal | Leading | Trailing",
+      "E | { +, *, id } | { +, *, id }"
+     ],
+     [
+      "stack \\ input | + | * | id | $",
+      "+ | ⋗ ⋖ | ⋖ ⋗ | ⋖ | ⋗",
+      "* | ⋗ ⋖ | ⋗ ⋖ | ⋖ | ⋗",
+      "id | ⋗ | ⋗ |  | ⋗",
+      "$ | ⋖ | ⋖ | ⋖ | "
+     ]
+    ],
+    "alerts": [
+     "Not an operator-precedence grammar. Conflicting cells:(+, +): ⋗ and ⋖(+, *): ⋖ and ⋗(*, +): ⋗ and ⋖(*, *): ⋗ and ⋖"
+    ],
+    "steps": [
+     "8",
+     "18"
+    ]
+   }
+  },
+  "malformed": {
+   "id + id * id": {
+    "tables": [],
+    "alerts": [
+     "Not an operator grammar:Invalid: E → ε is an ε-production (operator grammars cannot have empty bodies)."
+    ],
+    "steps": []
+   }
+  }
+ },
+ "console": [],
+ "routes": {
+  "home": {
+   "h1": "Compiler algorithms,one step at a time.",
+   "h2": [
+    "Regex to DFA",
+    "Bottom-up parsing",
+    "First & Follow",
+    "Top-down parsing"
+   ]
+  },
+  "regex-dfa": {
+   "h1": "Regex to DFA",
+   "h2": []
+  },
+  "bottom-up": {
+   "h1": "Bottom-Up Parsing",
+   "h2": [
+    "1 Grammar",
+    "2 Leading and Trailing sets",
+    "3 Precedence table",
+    "4 Parse a string"
+   ]
+  },
+  "first-follow": {
+   "h1": null,
+   "h2": [
+    "First & Follow"
+   ]
+  },
+  "top-down": {
+   "h1": null,
+   "h2": [
+    "Top-Down Parsing (LL)"
+   ]
+  },
+  "nonexistent": {
+   "h1": "Compiler algorithms,one step at a time.",
+   "h2": [
+    "Regex to DFA",
+    "Bottom-up parsing",
+    "First & Follow",
+    "Top-down parsing"
+   ]
+  }
+ }
+}

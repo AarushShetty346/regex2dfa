@@ -12,6 +12,8 @@ interface AutomatonGraphProps {
   label: string;
   /** Largest on-screen scale relative to the layout, so tiny graphs don't balloon. */
   maxScale?: number;
+  /** Fixed scale relative to the layout (from the zoom controls). Omit to fit the container. */
+  zoom?: number | null;
 }
 
 const reduceMotion = () =>
@@ -30,6 +32,7 @@ export default function AutomatonGraph({
   direction = 'LR',
   label,
   maxScale = 1.5,
+  zoom = null,
 }: AutomatonGraphProps) {
   const uid = useId().replace(/:/g, '');
   const layout = useMemo(() => layoutGraph(nodes, edges, direction), [nodes, edges, direction]);
@@ -55,12 +58,12 @@ export default function AutomatonGraph({
         const old = before.get(n.id);
         if (old) {
           if (old.x !== n.x || old.y !== n.y)
-            gsap.fromTo(el, { x: old.x - n.x, y: old.y - n.y }, { x: 0, y: 0, duration: 0.55, ease });
+            gsap.fromTo(el, { x: old.x - n.x, y: old.y - n.y }, { x: 0, y: 0, duration: 0.4, ease });
         } else {
           gsap.fromTo(
             el,
             { scale: 0.3, opacity: 0, transformOrigin: '50% 50%' },
-            { scale: 1, opacity: 1, duration: 0.5, delay: first ? 0 : 0.15, ease: 'back.out(2.2)' },
+            { scale: 1, opacity: 1, duration: 0.36, delay: first ? 0 : 0.12, ease: 'back.out(1.7)' },
           );
         }
       }
@@ -77,12 +80,12 @@ export default function AutomatonGraph({
           gsap.fromTo(
             path,
             { strokeDasharray: len, strokeDashoffset: len },
-            { strokeDashoffset: 0, duration: 0.6, delay: 0.25, ease: 'power2.inOut', clearProps: 'strokeDasharray,strokeDashoffset' },
+            { strokeDashoffset: 0, duration: 0.4, delay: 0.2, ease: 'power2.inOut', clearProps: 'strokeDasharray,strokeDashoffset' },
           );
         } else {
-          gsap.fromTo(path, { opacity: 0 }, { opacity: 1, duration: 0.4, delay: first ? 0 : 0.35 });
+          gsap.fromTo(path, { opacity: 0 }, { opacity: 1, duration: 0.3, delay: first ? 0 : 0.25 });
         }
-        if (text) gsap.fromTo(text, { opacity: 0 }, { opacity: 1, duration: 0.3, delay: first ? 0.1 : 0.55 });
+        if (text) gsap.fromTo(text, { opacity: 0 }, { opacity: 1, duration: 0.24, delay: first ? 0.1 : 0.4 });
       }
     }, svg);
     return () => ctx.revert();
@@ -96,7 +99,11 @@ export default function AutomatonGraph({
       ref={svgRef}
       className="graph"
       viewBox={`0 0 ${Math.max(width, 1)} ${Math.max(height, 1)}`}
-      style={{ maxWidth: Math.max(width, 1) * maxScale, minWidth: width * 0.68 }}
+      style={
+        zoom
+          ? { width: Math.max(width, 1) * zoom, maxWidth: 'none' }
+          : { maxWidth: Math.max(width, 1) * maxScale, minWidth: Math.min(width * 0.68, 560) }
+      }
       role="img"
       aria-label={label}
     >
@@ -160,10 +167,15 @@ export default function AutomatonGraph({
               >
                 {n.start && (
                   <path
+                    data-start
                     d={direction === 'LR' ? `M ${-n.r - 30} 0 L ${-n.r - 3} 0` : `M 0 ${-n.r - 30} L 0 ${-n.r - 3}`}
                     className={`edge edge-${tone === 'muted' ? 'muted' : 'idle'}`}
                     markerEnd={marker(tone === 'muted' ? 'muted' : 'idle')}
                   />
+                )}
+                {(tone === 'focus' || tone === 'new' || tone === 'ok' || tone === 'error') && (
+                  // A halo marks the active state by shape as well as colour.
+                  <circle r={n.r + 5} className="node-halo" />
                 )}
                 <circle r={n.r} className="node-body" />
                 {n.accepting && <circle r={n.r - 4} className="node-ring" />}

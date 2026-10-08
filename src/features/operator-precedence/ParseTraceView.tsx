@@ -1,4 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react';
+import { Info } from '@phosphor-icons/react';
 import { formatProduction, isNonTerminal, type Grammar } from '../../algorithms/grammar/types';
 import { parseString, type ParseStep } from '../../algorithms/operator-precedence/parseString';
 import type { PrecedenceTable } from '../../algorithms/operator-precedence/precedenceTable';
@@ -20,8 +21,8 @@ export default function ParseTraceView({ grammar, table, defaultInput = '' }: Pr
   return (
     <div>
       <div className="parse-form">
-        <label>
-          Input string:{' '}
+        <label className="inline-field">
+          <span className="field-label">Input string</span>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -34,7 +35,9 @@ export default function ParseTraceView({ grammar, table, defaultInput = '' }: Pr
       </div>
 
       <details className="info-note">
-        <summary>ℹ️ How handles are found and matched (skeletal reduction)</summary>
+        <summary>
+          <Info size={16} aria-hidden /> How handles are found and matched (skeletal reduction)
+        </summary>
         <p>
           When the top terminal ⋗ the input, the handle ends at the top of the stack. The parser
           walks down the stack over terminals related by ≐ until it finds a terminal that ⋖ the
@@ -58,7 +61,7 @@ export default function ParseTraceView({ grammar, table, defaultInput = '' }: Pr
       ) : (
         <>
           <StepController stepper={stepper} label="Parse steps" />
-          <div className="table-scroll">
+          <div className="table-scroll" tabIndex={0} aria-label="Parse trace" data-lenis-prevent>
             <table className="trace-table">
               <thead>
                 <tr>

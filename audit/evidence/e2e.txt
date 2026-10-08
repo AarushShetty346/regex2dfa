@@ -1,0 +1,35 @@
+PASS home title  [Compiler Visualizer]
+PASS home entrance animation settles to full opacity  [1]
+PASS nav link goes to regex page  [http://localhost:4802/regex2dfa/#/regex-dfa?re=%28a%7Cb%29*abb&stage=nfa]
+PASS page title updates  [Regex to DFA · Compiler Visualizer]
+PASS focus moves to h1 after navigation
+PASS URL mirrors regex and stage  [http://localhost:4802/regex2dfa/#/regex-dfa?re=%28a%7Cb%29*abb&stage=nfa]
+PASS stage tab updates URL  [http://localhost:4802/regex2dfa/#/regex-dfa?re=%28a%7Cb%29*abb&stage=min]
+PASS refresh keeps stage
+PASS back returns to regex page  [http://localhost:4802/regex2dfa/#/regex-dfa?re=%28a%7Cb%29*abb&stage=min]
+PASS forward returns to bottom-up  [http://localhost:4802/regex2dfa/#/bottom-up]
+PASS home pipeline link opens subset stage
+PASS example link fills the regex
+PASS invalid ?re= shows error and falls back
+PASS stale-result note shown for invalid input
+PASS unknown route falls back to home
+PASS graph nodes end fully visible after rapid stepping  [1]
+PASS step count after 5 next + 1 prev
+PASS ArrowRight on tabs moves to next stage
+PASS ArrowRight on tabs does not also step
+PASS End on tabs jumps to last stage
+PASS zoom in enlarges graph  [708->1084]
+PASS fit restores size
+PASS list view shows one row per state (5 before minimization)  [5]
+PASS list view names start and accepting states
+PASS scrubber hit area >= 24px  [24]
+PASS mobile nav hidden by default
+PASS menu opens
+PASS Escape closes menu
+PASS choosing a page closes menu
+PASS no visible control under 24px on touch  [[]]
+PASS first Tab reaches the skip link
+PASS skip link visible when focused
+PASS every focused control shows a focus indicator (40 tabs)  [[]]
+PASS no console errors or page errors  [[]]
+34 / 34 passed

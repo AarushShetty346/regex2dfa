@@ -10,8 +10,8 @@ export function useReveal<T extends HTMLElement>(key: unknown) {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         el.querySelectorAll('[data-reveal]'),
-        { opacity: 0, y: 14 },
-        { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', stagger: 0.06, clearProps: 'transform' },
+        { opacity: 0, y: 6 },
+        { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out', stagger: 0.04, clearProps: 'opacity,transform' },
       );
     }, el);
     return () => ctx.revert();
@@ -20,6 +20,7 @@ export function useReveal<T extends HTMLElement>(key: unknown) {
 }
 
 interface StageLayoutProps {
+  /** The main drawing (usually a GraphFrame). */
   canvas: ReactNode;
   /** Extra panel under the main canvas (e.g. the NFA reference during subset construction). */
   below?: ReactNode;
@@ -27,17 +28,21 @@ interface StageLayoutProps {
   rail: ReactNode;
 }
 
+/**
+ * Workbench layout for one stage: the canvas dominates, with the step controls docked under
+ * it; the explanation rail sits to the right on wide screens and below on narrow ones.
+ */
 export function StageLayout({ canvas, below, controller, rail }: StageLayoutProps) {
   return (
     <div className="stage">
       <div className="stage-main">
-        <div className="canvas" data-reveal>
+        <section className="canvas-panel" data-reveal aria-label="Visualization">
           {canvas}
-        </div>
-        {controller && <div data-reveal>{controller}</div>}
+          {controller && <div className="canvas-dock">{controller}</div>}
+        </section>
         {below}
       </div>
-      <aside className="stage-rail" data-reveal>
+      <aside className="stage-rail" data-reveal aria-label="Explanation">
         {rail}
       </aside>
     </div>
@@ -47,6 +52,11 @@ export function StageLayout({ canvas, below, controller, rail }: StageLayoutProp
 export function EmptyCanvas({ title, hint }: { title: string; hint: string }) {
   return (
     <div className="canvas-empty">
+      <svg width="40" height="24" viewBox="0 0 40 24" aria-hidden className="canvas-empty-mark">
+        <path d="M1 12 H10" />
+        <circle cx="20" cy="12" r="9" />
+        <path d="M29 12 H39" strokeDasharray="3 3" />
+      </svg>
       <p className="canvas-empty-title">{title}</p>
       <p className="muted">{hint}</p>
     </div>
@@ -62,9 +72,9 @@ interface StepCardProps {
 /** The narration for the step that is currently highlighted. */
 export function StepCard({ kicker, title, detail }: StepCardProps) {
   return (
-    <section className="step-card" aria-live="polite">
+    <section className="step-card" aria-live="polite" aria-atomic="true">
       <p className="step-kicker">{kicker}</p>
-      <h3 className="step-title">{title}</h3>
+      <h2 className="step-title">{title}</h2>
       <p className="step-detail">{detail}</p>
     </section>
   );
@@ -89,13 +99,16 @@ export function StepList({ items, shown, onSelect }: StepListProps) {
   }, [shown]);
 
   return (
-    <ol className="step-list" ref={listRef} data-lenis-prevent>
+    <ol className="step-list" ref={listRef} data-lenis-prevent aria-label="All steps">
       {items.map((it, i) => {
         const state = i < shown - 1 ? 'done' : i === shown - 1 ? 'current' : 'todo';
         return (
           <li key={i} className={`step-item ${state}`} aria-current={state === 'current' ? 'step' : undefined}>
             <button type="button" onClick={() => onSelect(i + 1)}>
-              <span className="step-index mono">{String(i + 1).padStart(2, '0')}</span>
+              <span className="step-index mono" aria-hidden>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span className="sr-only">{`Step ${i + 1}${state === 'current' ? ' (current)' : state === 'done' ? ' (done)' : ''}: `}</span>
               <span className="step-item-title">{it.title}</span>
               {it.meta && <span className="step-item-meta mono">{it.meta}</span>}
             </button>
@@ -108,4 +121,15 @@ export function StepList({ items, shown, onSelect }: StepListProps) {
 
 export function SetText({ set }: { set: number[] }) {
   return <span className="mono set-text">{`{${set.join(', ')}}`}</span>;
+}
+
+/** A state name with start/accepting markers drawn as shapes (with text for screen readers). */
+export function StateName({ name, start, accepting }: { name: string; start?: boolean; accepting?: boolean }) {
+  return (
+    <span className="state-name">
+      {start && <span className="start-mark" role="img" aria-label="start" title="start state" />}
+      {name}
+      {accepting && <span className="accept-mark" role="img" aria-label="accepting" title="accepting state" />}
+    </span>
+  );
 }

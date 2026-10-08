@@ -1,0 +1,4 @@
+# http://localhost:4802/regex2dfa/#/bottom-up (light)
+## 360px: overflow 0px | contrast 3 | targets<44 22 (<24: 1) | census: 4 radii ['12px', '50%', '6px', '8px'], 1 shadows, 8 font sizes, 2 families, section paddings ['0px']
+## 768px: overflow 0px | contrast 3 | targets<44 23 (<24: 1) | census: 4 radii ['12px', '50%', '6px', '8px'], 1 shadows, 8 font sizes, 2 families, section paddings ['0px']
+## 1280px: overflow 0px | contrast 3 | targets<44 27 (<24: 1) | focus_invisible 0 | census: 4 radii ['12px', '50%', '6px', '8px'], 1 shadows, 8 font sizes, 2 families, section paddings ['0px']

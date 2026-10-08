@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { EPSILON, type NFA, type SubsetResult } from '../../algorithms/regex';
-import AutomatonGraph from '../../components/graph/AutomatonGraph';
+import GraphFrame, { LegendItem } from '../../components/graph/GraphFrame';
 import type { GraphEdge, GraphNode } from '../../components/graph/layout';
 import StepController from '../../components/stepper/StepController';
 import { useStepper } from '../../components/stepper/useStepper';
-import { EmptyCanvas, SetText, StageLayout, StepCard, StepList } from './shared';
+import { EmptyCanvas, SetText, StageLayout, StateName, StepCard, StepList } from './shared';
 
 export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa: NFA }) {
   const { steps } = result;
@@ -68,7 +68,23 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
     <StageLayout
       canvas={
         dfaGraph ? (
-          <AutomatonGraph nodes={dfaGraph.nodes} edges={dfaGraph.edges} label={`DFA after step ${stepper.shown}`} />
+          <GraphFrame
+            nodes={dfaGraph.nodes}
+            edges={dfaGraph.edges}
+            label={`DFA after step ${stepper.shown}`}
+            caption={
+              <>
+                DFA under construction <span className="muted">· {dfaGraph.nodes.length} states so far</span>
+              </>
+            }
+            legend={
+              <>
+                <LegendItem kind="new">new state or edge</LegendItem>
+                <LegendItem kind="focus">state being expanded</LegendItem>
+                <LegendItem kind="accept">contains the NFA accept state</LegendItem>
+              </>
+            }
+          />
         ) : (
           <EmptyCanvas
             title="No DFA states yet"
@@ -78,9 +94,9 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
       }
       controller={<StepController stepper={stepper} label="Subset construction steps" keyboard />}
       below={
-        <section className="panel" data-reveal>
+        <section className="panel nfa-reference" data-reveal aria-labelledby="nfa-ref-title">
           <header className="panel-header">
-            <h3>Thompson NFA</h3>
+            <h2 id="nfa-ref-title" className="panel-subtitle">Thompson NFA, for reference</h2>
             <p className="muted">
               {step?.kind === 'move' ? (
                 <>
@@ -94,9 +110,20 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
               )}
             </p>
           </header>
-          <div className="canvas canvas-compact">
-            <AutomatonGraph nodes={nfaGraph.nodes} edges={nfaGraph.edges} label="Thompson NFA with the current sets highlighted" maxScale={1.1} />
-          </div>
+          <GraphFrame
+            compact
+            nodes={nfaGraph.nodes}
+            edges={nfaGraph.edges}
+            label="Thompson NFA with the current sets highlighted"
+            maxScale={1.1}
+            legend={
+              <>
+                <LegendItem kind="new">reached on the symbol</LegendItem>
+                <LegendItem kind="set">in the ε-closure</LegendItem>
+                <LegendItem kind="eps">ε-edge</LegendItem>
+              </>
+            }
+          />
         </section>
       }
       rail={
@@ -110,7 +137,7 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
               detail="Start from the ε-closure of the NFA's start. For every DFA state and every symbol, follow the symbol's edges, then close over ε. New sets become new DFA states."
             />
           )}
-          <div className="table-wrap" data-lenis-prevent>
+          <div className="table-wrap" data-lenis-prevent tabIndex={0} aria-label="Dtran transition table">
             <table className="dtran">
               <caption>Dtran</caption>
               <thead>
@@ -135,8 +162,7 @@ export default function SubsetStage({ result, nfa }: { result: SubsetResult; nfa
                 {visibleStates.map((s) => (
                   <tr key={s.id} className={step?.kind === 'move' && step.from === s.id ? 'row-active' : undefined}>
                     <th scope="row" className="mono">
-                      {s.name}
-                      {s.accepting && <span className="accept-mark" aria-label="accepting" title="accepting" />}
+                      <StateName name={s.name} start={s.id === step?.dfa.start} accepting={s.accepting} />
                     </th>
                     <td>
                       <SetText set={s.nfaStates} />
