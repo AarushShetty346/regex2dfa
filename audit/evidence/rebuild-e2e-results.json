@@ -1,0 +1,177 @@
+[
+ [
+  "home title",
+  true,
+  "Compiler Visualizer"
+ ],
+ [
+  "home entrance animation settles to full opacity",
+  true,
+  "1"
+ ],
+ [
+  "nav link goes to regex page",
+  true,
+  "http://localhost:4802/regex2dfa/#/regex-dfa?re=%28a%7Cb%29*abb&stage=nfa"
+ ],
+ [
+  "page title updates",
+  true,
+  "Regex to DFA \u00b7 Compiler Visualizer"
+ ],
+ [
+  "focus moves to h1 after navigation",
+  true,
+  ""
+ ],
+ [
+  "URL mirrors regex and stage",
+  true,
+  "http://localhost:4802/regex2dfa/#/regex-dfa?re=%28a%7Cb%29*abb&stage=nfa"
+ ],
+ [
+  "stage tab updates URL",
+  true,
+  "http://localhost:4802/regex2dfa/#/regex-dfa?re=%28a%7Cb%29*abb&stage=min"
+ ],
+ [
+  "refresh keeps stage",
+  true,
+  ""
+ ],
+ [
+  "back returns to regex page",
+  true,
+  "http://localhost:4802/regex2dfa/#/regex-dfa?re=%28a%7Cb%29*abb&stage=min"
+ ],
+ [
+  "forward returns to bottom-up",
+  true,
+  "http://localhost:4802/regex2dfa/#/bottom-up"
+ ],
+ [
+  "home pipeline link opens subset stage",
+  true,
+  ""
+ ],
+ [
+  "example link fills the regex",
+  true,
+  ""
+ ],
+ [
+  "invalid ?re= shows error and falls back",
+  true,
+  ""
+ ],
+ [
+  "stale-result note shown for invalid input",
+  true,
+  ""
+ ],
+ [
+  "unknown route falls back to home",
+  true,
+  ""
+ ],
+ [
+  "graph nodes end fully visible after rapid stepping",
+  true,
+  "1"
+ ],
+ [
+  "step count after 5 next + 1 prev",
+  true,
+  ""
+ ],
+ [
+  "ArrowRight on tabs moves to next stage",
+  true,
+  ""
+ ],
+ [
+  "ArrowRight on tabs does not also step",
+  true,
+  ""
+ ],
+ [
+  "End on tabs jumps to last stage",
+  true,
+  ""
+ ],
+ [
+  "zoom in enlarges graph",
+  true,
+  "813->1355"
+ ],
+ [
+  "fit restores size",
+  true,
+  ""
+ ],
+ [
+  "list view shows one row per state (5 before minimization)",
+  true,
+  "5"
+ ],
+ [
+  "list view names start and accepting states",
+  true,
+  ""
+ ],
+ [
+  "theme toggle switches and persists",
+  true,
+  "light->dark"
+ ],
+ [
+  "scrubber hit area >= 24px",
+  true,
+  "28"
+ ],
+ [
+  "mobile nav hidden by default",
+  true,
+  ""
+ ],
+ [
+  "menu opens",
+  true,
+  ""
+ ],
+ [
+  "Escape closes menu",
+  true,
+  ""
+ ],
+ [
+  "choosing a page closes menu",
+  true,
+  ""
+ ],
+ [
+  "no visible control under 24px on touch",
+  true,
+  "[]"
+ ],
+ [
+  "first Tab reaches the skip link",
+  true,
+  ""
+ ],
+ [
+  "skip link visible when focused",
+  true,
+  ""
+ ],
+ [
+  "every focused control shows a focus indicator (40 tabs)",
+  true,
+  "[]"
+ ],
+ [
+  "no console errors or page errors",
+  true,
+  "[]"
+ ]
+]

@@ -1,0 +1,178 @@
+/*
+ * Design tokens.
+ *
+ * Generated from the UI UX Pro Max data set ("Developer Tool / IDE" palette: code dark + run
+ * green, with the "Educational App" indigo as a secondary hue, and the "Developer Mono" font
+ * pairing: JetBrains Mono headings over IBM Plex Sans). Style: Swiss minimalism on an IDE canvas.
+ * See docs/DESIGN_SYSTEM.md for the reasoning and the rules.
+ *
+ * Components only ever read the semantic names below (never raw hex), so both themes come from
+ * one set of rules.
+ */
+:root {
+  --font-sans: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Type scale (1.2 minor third, 16px body) */
+  --text-2xs: 0.6875rem; /* 11 */
+  --text-xs: 0.75rem;    /* 12 */
+  --text-sm: 0.875rem;   /* 14 */
+  --text-md: 1rem;       /* 16 */
+  --text-lg: 1.125rem;   /* 18 */
+  --text-xl: 1.375rem;   /* 22 */
+  --text-2xl: 1.75rem;   /* 28 */
+  --text-3xl: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
+
+  /* 4px spacing grid */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px; --sp-20: 80px;
+
+  /* Corners: square-ish, like an editor */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+
+  /* Control heights. 44px on touch (UI UX Pro Max: touch targets ≥ 44×44). */
+  --control: 38px;
+  --control-sm: 32px;
+
+  /* Motion: feedback < state change < layout change; exits faster than entries. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-fast: 120ms;
+  --t-base: 180ms;
+  --t-slow: 280ms;
+
+  --shell-height: 60px;
+  --page-max: 1360px;
+  --gutter: clamp(16px, 3vw, 32px);
+}
+
+@media (pointer: coarse) {
+  :root { --control: 44px; --control-sm: 44px; }
+}
+
+/* ---------- Dark (default) ---------- */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b1222;
+  --bg-grid: rgb(148 163 184 / 0.07);
+  --surface: #111a2e;
+  --surface-raised: #1b2336;
+  --surface-sunken: #0a101d;
+  --surface-hover: #222c42;
+  --overlay: rgb(3 7 18 / 0.72);
+
+  --fg: #f8fafc;
+  --fg-muted: #a5b1c4;
+  --fg-subtle: #8593a8;
+
+  --line: rgb(148 163 184 / 0.16);
+  --line-strong: rgb(148 163 184 / 0.3);
+  --line-control: #5d6b82; /* ≥ 3:1 against the surface for inputs */
+
+  --primary: #22c55e;
+  --primary-hover: #4ade80;
+  --primary-fg: #052e16;
+  --primary-soft: rgb(34 197 94 / 0.13);
+  --primary-line: rgb(34 197 94 / 0.45);
+
+  --secondary: #818cf8;
+  --secondary-soft: rgb(129 140 248 / 0.16);
+  --secondary-line: rgb(129 140 248 / 0.5);
+
+  --highlight: #f59e0b;
+  --highlight-fg: #fbbf24;
+  --highlight-soft: rgb(245 158 11 / 0.16);
+
+  --success: #22c55e;
+  --success-soft: rgb(34 197 94 / 0.12);
+  --danger: #f87171;
+  --danger-strong: #ef4444;
+  --danger-soft: rgb(239 68 68 / 0.13);
+  --info-soft: rgb(129 140 248 / 0.12);
+
+  --ring: #4ade80;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 16px 40px -24px rgb(0 0 0 / 0.9);
+  --shadow-lg: 0 24px 64px -24px rgb(0 0 0 / 0.85);
+
+  /* Diagram */
+  --node-fill: #16203a;
+  --node-stroke: #64748b;
+  --node-text: #e2e8f0;
+  --edge: #7c8aa2;
+  --edge-muted: rgb(124 138 162 / 0.35);
+  --label-bg: #0f1729;
+
+  /* Partition groups (categorical; minimization only) */
+  --grp-0: rgb(129 140 248 / 0.22); --grp-0-line: #818cf8;
+  --grp-1: rgb(245 158 11 / 0.2);   --grp-1-line: #f59e0b;
+  --grp-2: rgb(34 197 94 / 0.2);    --grp-2-line: #22c55e;
+  --grp-3: rgb(236 72 153 / 0.2);   --grp-3-line: #f472b6;
+  --grp-4: rgb(45 212 191 / 0.2);   --grp-4-line: #2dd4bf;
+  --grp-5: rgb(248 113 113 / 0.2);  --grp-5-line: #f87171;
+}
+
+/* ---------- Light ---------- */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f6f8fb;
+  --bg-grid: rgb(15 23 42 / 0.055);
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #eef2f7;
+  --surface-hover: #f1f5f9;
+  --overlay: rgb(15 23 42 / 0.4);
+
+  --fg: #0f172a;
+  --fg-muted: #475569;
+  --fg-subtle: #5b6b80;
+
+  --line: #e2e8f0;
+  --line-strong: #cbd5e1;
+  --line-control: #8a99ad;
+
+  --primary: #15803d;
+  --primary-hover: #166534;
+  --primary-fg: #ffffff;
+  --primary-soft: rgb(22 163 74 / 0.1);
+  --primary-line: rgb(21 128 61 / 0.45);
+
+  --secondary: #4f46e5;
+  --secondary-soft: rgb(79 70 229 / 0.1);
+  --secondary-line: rgb(79 70 229 / 0.45);
+
+  --highlight: #d97706;
+  --highlight-fg: #b45309;
+  --highlight-soft: rgb(217 119 6 / 0.14);
+
+  --success: #15803d;
+  --success-soft: rgb(22 163 74 / 0.1);
+  --danger: #dc2626;
+  --danger-strong: #dc2626;
+  --danger-soft: rgb(220 38 38 / 0.08);
+  --info-soft: rgb(79 70 229 / 0.07);
+
+  --ring: #15803d;
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 1px 2px rgb(15 23 42 / 0.05), 0 12px 32px -20px rgb(15 23 42 / 0.25);
+  --shadow-lg: 0 24px 64px -28px rgb(15 23 42 / 0.35);
+
+  --node-fill: #ffffff;
+  --node-stroke: #94a3b8;
+  --node-text: #0f172a;
+  --edge: #64748b;
+  --edge-muted: rgb(100 116 139 / 0.35);
+  --label-bg: #ffffff;
+
+  --grp-0: rgb(79 70 229 / 0.14);  --grp-0-line: #4f46e5;
+  --grp-1: rgb(217 119 6 / 0.16);  --grp-1-line: #d97706;
+  --grp-2: rgb(22 163 74 / 0.14);  --grp-2-line: #15803d;
+  --grp-3: rgb(219 39 119 / 0.13); --grp-3-line: #db2777;
+  --grp-4: rgb(13 148 136 / 0.14); --grp-4-line: #0d9488;
+  --grp-5: rgb(220 38 38 / 0.12);  --grp-5-line: #dc2626;
+}

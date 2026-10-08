@@ -40,27 +40,26 @@ src/
       precedenceTable.ts              table step log, conflict detection, lookupRelation
       parseString.ts                  shift/reduce trace, handle detection, skeletal reduction
       *.test.ts                       Vitest tests (expected values from the spec)
-  components/
-    ComingSoon.tsx                    placeholder card
-    stepper/
-      useStepper.ts                   position state for any step list (reusable)
-      StepController.tsx              Next / Previous / Show All / Reset buttons
-      StepExplanation.tsx             "what happened and why" panel
-  features/operator-precedence/       React UI only; no algorithm logic here
-    OperatorPrecedenceView.tsx        runs the pipeline (analyze()) and lays out the sections
-    Section.tsx                       numbered card with optional "disabled" reason
-    GrammarInput.tsx                  textarea, samples, errors
-    LeadingTrailingView.tsx           sets table and step log
-    PrecedenceTableView.tsx           grid, conflict display, verdict
-    ParseTraceView.tsx                input form, trace table, stack rendering
-    operatorPrecedence.css
-  pages/                              HomePage, BottomUpParsingPage (method selector)
-  App.tsx                             sidebar plus hash routing (#/bottom-up)
-  styles.css                          global styles and colour tokens (light and dark)
+  lib/
+    stepper/useStepper.ts             position state for any step list (reusable)
+    graph/                            dagre layout and the text version of a graph
+  stepper/StepBar.tsx                 Reset / Previous / Next / Show all and a scrubber
+  pages/parsing/                      React UI only; no algorithm logic here
+    BottomUpPage.tsx                  method tabs (Ark UI)
+    operator-precedence/
+      OperatorPrecedence.tsx          runs the pipeline (analyze()) and lays out the four sections
+      GrammarEditor.tsx               code editor, sample menu, errors
+      SetsView.tsx                    Leading/Trailing table and step log
+      TableView.tsx                   precedence matrix, conflicts, verdict
+      TraceView.tsx                   input, trace table, stack rendering
+      parts.tsx                       step explanation and disclosure
+  ui/                                 shared primitives on Ark UI
+  styles/                             design tokens (light and dark) and component CSS
+  App.tsx                             top bar, mobile drawer and hash routing (#/bottom-up)
 ```
 
 **Rule of thumb:** to change *what* is computed, edit `src/algorithms/` and its tests. To change
-*how it looks*, edit `src/features/`. The two only meet through the exported types.
+*how it looks*, edit `src/pages/parsing/` and `src/styles/`. The two only meet through the exported types.
 
 ## The step-log data structure
 

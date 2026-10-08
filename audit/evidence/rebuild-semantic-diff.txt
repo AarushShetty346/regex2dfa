@@ -1,0 +1,11 @@
+total diffs 10
+/routes/home/h2[0] | 'The Regex to DFA pipeline' => 'Five stages, one tab each'
+/routes/home/h2[1] | 'Modules' => 'What you can use today, and what is next'
+/routes/home/h2[2] | 'Start from an example' => 'Start from an expression'
+/routes/bottom-up/h2[0] | '01 Grammar' => 'Step 1: Grammar'
+/routes/bottom-up/h2[1] | '02 Leading and Trailing sets' => 'Step 2: Leading and Trailing sets'
+/routes/bottom-up/h2[2] | '03 Precedence table' => 'Step 3: Precedence table'
+/routes/bottom-up/h2[3] | '04 Parse a string' => 'Step 4: Parse a string'
+/routes/nonexistent/h2[0] | 'The Regex to DFA pipeline' => 'Five stages, one tab each'
+/routes/nonexistent/h2[1] | 'Modules' => 'What you can use today, and what is next'
+/routes/nonexistent/h2[2] | 'Start from an example' => 'Start from an expression'
