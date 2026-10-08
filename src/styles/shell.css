@@ -1,4 +1,4 @@
-/* App shell: top bar, mobile drawer, page frame, footer. */
+/* App shell: top bar, mobile drawer, page frame. */
 
 .shell {
   min-height: 100dvh;
@@ -50,16 +50,7 @@
   display: flex; align-items: center; gap: 20px;
 }
 
-.brand { display: inline-flex; align-items: center; gap: 10px; border-radius: var(--radius-sm); }
-.brand-text { display: grid; line-height: 1.1; }
-.brand-name { font-family: var(--font-mono); font-weight: 700; font-size: var(--text-sm); letter-spacing: -0.02em; }
-.brand-sub { font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--fg-subtle); }
-.brand-mark .brand-tile { fill: var(--surface-raised); stroke: var(--line-strong); }
-.brand-mark .brand-arrow { fill: none; stroke: var(--fg-muted); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.brand-mark .brand-ring { fill: none; stroke: var(--primary); stroke-width: 1.8; }
-.brand-mark .brand-core { fill: var(--primary); }
-
-.topnav { margin-left: 12px; flex: 1; min-width: 0; }
+.topnav { flex: 1; min-width: 0; }
 .topnav ul { display: flex; align-items: center; gap: 2px; }
 .nav-link {
   display: inline-flex; align-items: center; gap: 8px;
@@ -125,7 +116,6 @@
 .drawer-links { display: grid; gap: 4px; }
 .drawer-links .nav-link { height: 48px; width: 100%; font-size: var(--text-md); padding: 0 12px; }
 .drawer-links .nav-soon { margin-left: auto; }
-.drawer-foot { margin-top: auto; padding: 16px 12px 0; font-size: var(--text-sm); color: var(--fg-subtle); }
 
 /* ---------- Page frame ---------- */
 
@@ -146,14 +136,3 @@
 .page-intro h1 { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem); line-height: 1.1; outline: none; }
 .page-lede { color: var(--fg-muted); font-size: var(--text-lg); line-height: 1.55; max-width: 66ch; }
 
-.footer {
-  max-width: var(--page-max);
-  width: 100%;
-  margin: 0 auto;
-  padding: 20px var(--gutter) 28px;
-  border-top: 1px solid var(--line);
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
-  font-size: var(--text-sm);
-  color: var(--fg-subtle);
-}
-.footer-mono { font-family: var(--font-mono); font-size: var(--text-xs); }

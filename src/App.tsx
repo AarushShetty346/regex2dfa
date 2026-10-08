@@ -86,14 +86,6 @@ export default function App() {
 
       <header className="topbar">
         <div className="topbar-inner">
-          <a className="brand" href={topicHref('home')} aria-label="Compiler Visualizer, home">
-            <BrandMark />
-            <span className="brand-text">
-              <span className="brand-name">Compiler Visualizer</span>
-              <span className="brand-sub">regex2dfa</span>
-            </span>
-          </a>
-
           <nav className="topnav" aria-label="Modules">
             <ul>{links()}</ul>
           </nav>
@@ -116,7 +108,6 @@ export default function App() {
                     <nav aria-label="Modules">
                       <ul className="drawer-links">{links(() => setMenuOpen(false))}</ul>
                     </nav>
-                    <p className="drawer-foot">Everything runs in your browser.</p>
                   </Dialog.Content>
                 </Dialog.Positioner>
               </Portal>
@@ -129,10 +120,6 @@ export default function App() {
         {renderPage(route, navKey)}
       </main>
 
-      <footer className="footer">
-        <span>Compiler Visualizer · every algorithm runs locally in your browser.</span>
-        <span className="footer-mono">regex → ε-NFA → DFA → min-DFA</span>
-      </footer>
     </div>
   );
 }
@@ -150,15 +137,3 @@ function renderPage({ page, params }: Route, navKey: number) {
   }
 }
 
-/** A start arrow into an accepting state: the smallest complete automaton, used as the mark. */
-function BrandMark() {
-  return (
-    <svg viewBox="0 0 36 36" width="32" height="32" aria-hidden className="brand-mark">
-      <rect x="0.5" y="0.5" width="35" height="35" rx="9" className="brand-tile" />
-      <path d="M5 18 H12" className="brand-arrow" />
-      <path d="M10 15 L13 18 L10 21" className="brand-arrow" />
-      <circle cx="22" cy="18" r="8" className="brand-ring" />
-      <circle cx="22" cy="18" r="4.5" className="brand-core" />
-    </svg>
-  );
-}
