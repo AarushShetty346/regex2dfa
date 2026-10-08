@@ -8,7 +8,7 @@ the UI walks through those steps with Next / Previous / Show All / Reset.
 
 | Topic | Status |
 |---|---|
-| Regex → DFA (syntax tree, Thompson NFA, subset construction, minimization, string tester) | Done |
+| Regex → DFA by the direct method (augmented syntax tree, nullable/firstpos/lastpos, followpos, DFA, string tester) | Done |
 | Bottom-Up Parsing → Operator Precedence Parsing | Done; see [docs/OPERATOR_PRECEDENCE_HANDOFF.md](docs/OPERATOR_PRECEDENCE_HANDOFF.md) |
 | Bottom-Up Parsing → LR Parsing | Coming soon |
 | First & Follow, Top-Down (LL) | Coming soon |
@@ -25,7 +25,7 @@ npm run build    # type-check and build to dist/
 ```
 
 Links to the Regex → DFA page can carry the expression and stage, e.g.
-`#/regex-dfa?re=(a|b)*abb&stage=dfa` (stages: `tree`, `nfa`, `dfa`, `min`, `test`).
+`#/regex-dfa?re=(a|b)*abb&stage=dfa` (stages: `tree`, `follow`, `dfa`, `test`).
 
 ## Stack
 

@@ -1,5 +1,5 @@
 /**
- * Topics and hash routing. URLs look like `#/regex-dfa` or `#/regex-dfa?re=a*&stage=min`.
+ * Topics and hash routing. URLs look like `#/regex-dfa` or `#/regex-dfa?re=a*&stage=dfa`.
  *
  * We avoid a router dependency on purpose: the app only has a handful of pages, and the hash
  * keeps URLs shareable and back-button friendly without any server configuration (the site is
@@ -14,8 +14,8 @@ export const TOPICS = [
     id: 'regex-dfa',
     label: 'Regex to DFA',
     status: 'available',
-    summary: 'Turn a regular expression into its smallest DFA, then run strings through it.',
-    covers: ['Syntax tree', 'Thompson NFA', 'Subset construction', 'Minimization', 'String tester'],
+    summary: 'Turn a regular expression into a DFA with the direct method, then run strings through it.',
+    covers: ['Augmented syntax tree', 'firstpos / lastpos', 'followpos', 'DFA', 'String tester'],
   },
   {
     id: 'bottom-up',

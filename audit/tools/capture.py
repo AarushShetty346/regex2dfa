@@ -13,7 +13,7 @@ OUT = sys.argv[2]
 REGEXES = ['a', 'ab', 'a|b', 'a*', '(a|b)*', 'a(b|c)*', '(a|b)*abb', 'a(b|c)*d+', '(0|1(01*0)*1)*', '(ab|ba)?c*', '(a|ε)b+a?', 'a\\*b']
 INVALID = ['', '(a', 'a|', '*a', ')', 'a\\', '(a|b', 'a||b']
 STRINGS = ['', 'a', 'aaa', 'b', 'ab', 'abb', 'babb', 'abc', 'ba', 'bd', 'acd', 'c', '0110', 'x']
-STAGES = ['Syntax tree', 'Thompson NFA', 'Subset construction', 'Minimize', 'Test strings']
+STAGES = ['Syntax tree', 'followpos', 'DFA', 'Test strings']
 
 GRAPH_JS = r"""() => [...document.querySelectorAll('main svg[role=img]')].filter(s => !s.closest('.hero-demo, [data-demo]')).map(svg => ({
   nodes: [...svg.querySelectorAll('[data-node]')].map(g => {
@@ -97,9 +97,9 @@ def main():
             res['invalid'][rx] = {'aria_invalid': inp.get_attribute('aria-invalid'),
                                   'alert': alert.first.text_content() if alert.count() else None}
 
-        # Stepper behaviour on the Thompson stage
+        # Stepper behaviour on the syntax tree stage
         set_regex(pg, '(a|b)*abb')
-        stage_button(pg, 'Thompson NFA').click()
+        stage_button(pg, 'Syntax tree').click()
         pg.wait_for_timeout(150)
         scrub = pg.locator('input[type=range][aria-label="Jump to step"]').first
         log = []

@@ -1,9 +1,5 @@
 import { useId } from 'react';
-import { Menu } from '@ark-ui/react/menu';
-import { Portal } from '@ark-ui/react/portal';
-import { ChevronDown, FileText } from 'lucide-react';
 import type { Grammar } from '../../../algorithms/grammar/types';
-import { SAMPLE_GRAMMARS } from '../../../algorithms/operator-precedence/samples';
 import { Callout } from '../../../ui/primitives';
 
 interface GrammarEditorProps {
@@ -25,31 +21,6 @@ export default function GrammarEditor({ text, onChange, grammar, errors, errorTi
         <label htmlFor={`${id}-grammar`} className="field-label">
           Productions
         </label>
-        <Menu.Root
-          positioning={{ placement: 'bottom-end' }}
-          onSelect={(d) => {
-            const sample = SAMPLE_GRAMMARS.find((s) => s.id === d.value);
-            if (sample) onChange(sample.text);
-          }}
-        >
-          <Menu.Trigger className="btn btn-secondary btn-sm">
-            <FileText size={15} aria-hidden />
-            Load sample
-            <ChevronDown size={15} aria-hidden />
-          </Menu.Trigger>
-          <Portal>
-            <Menu.Positioner>
-              <Menu.Content className="menu">
-                {SAMPLE_GRAMMARS.map((s) => (
-                  <Menu.Item key={s.id} value={s.id} className="menu-item">
-                    <span>{s.label}</span>
-                    <code className="menu-item-code">{s.text.split('\n')[0]}</code>
-                  </Menu.Item>
-                ))}
-              </Menu.Content>
-            </Menu.Positioner>
-          </Portal>
-        </Menu.Root>
       </div>
 
       <div className="code-editor">

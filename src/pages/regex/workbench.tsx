@@ -24,7 +24,7 @@ interface WorkbenchProps {
   canvas: ReactNode;
   /** Step controls docked under the canvas. */
   controls?: ReactNode;
-  /** Extra panel under the canvas (e.g. the NFA for reference). */
+  /** Extra panel under the canvas (e.g. the followpos table for reference). */
   below?: ReactNode;
   /** The inspector: narration, tables, step log. */
   inspector: ReactNode;

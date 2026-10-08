@@ -64,7 +64,6 @@
 .error-pointer mark { background: var(--danger-soft); color: var(--danger); border-bottom: 2px solid var(--danger); border-radius: 2px; }
 .error-pointer mark.is-caret { background: none; border: 0; animation: blink 1s steps(2) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
-.expr-examples { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
 
 .expr-stats {
   display: grid;

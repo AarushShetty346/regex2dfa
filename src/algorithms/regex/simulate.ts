@@ -1,4 +1,4 @@
-import type { DFA } from './subset';
+import type { DFA } from './dfa';
 
 export interface SimulationStep {
   /** Index of the character consumed by this step. */

@@ -10,9 +10,9 @@ const DEMO_INPUT = 'babb';
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/** The real minimal DFA for (a|b)*abb reading a string on a loop, with play/pause. */
+/** The real DFA (direct method) for (a|b)*abb reading a string on a loop, with play/pause. */
 export default function LiveDemo() {
-  const dfa = useMemo(() => regexPipeline(DEMO_REGEX).minimize.dfa, []);
+  const dfa = useMemo(() => regexPipeline(DEMO_REGEX).direct.dfa, []);
   const run = useMemo(() => simulate(dfa, DEMO_INPUT), [dfa]);
   const frames = run.steps.length + 2; // start, one per character, then a pause on the verdict
   const [playing, setPlaying] = useState(() => !reducedMotion());
@@ -48,14 +48,14 @@ export default function LiveDemo() {
       <div className="demo-head">
         <span className="demo-live" aria-hidden />
         <span className="demo-title">
-          Minimal DFA <code>{DEMO_REGEX}</code>
+          DFA <code>{DEMO_REGEX}</code>
         </span>
         <IconButton label={playing ? 'Pause the demo' : 'Play the demo'} onClick={() => setPlaying((p) => !p)} variant="secondary">
           {playing ? <Pause size={15} aria-hidden /> : <Play size={15} aria-hidden />}
         </IconButton>
       </div>
       <div className="demo-canvas">
-        <StateDiagram nodes={nodes} edges={edges} label={`Minimal DFA for ${DEMO_REGEX} reading ${DEMO_INPUT}`} />
+        <StateDiagram nodes={nodes} edges={edges} label={`DFA for ${DEMO_REGEX} reading ${DEMO_INPUT}`} />
       </div>
       <figcaption className="demo-foot">
         <span className="tape is-inline" aria-label={`Input ${DEMO_INPUT}`}>

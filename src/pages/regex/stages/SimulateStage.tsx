@@ -101,8 +101,8 @@ export default function SimulateStage({ dfa }: { dfa: DFA }) {
         <DiagramPanel
           nodes={graph.nodes}
           edges={graph.edges}
-          label="Minimal DFA running on the test string"
-          title="Minimal DFA"
+          label="DFA running on the test string"
+          title="DFA"
           meta={`current state ${name(current)}`}
           legend={
             <>
