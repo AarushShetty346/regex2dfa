@@ -102,6 +102,40 @@ describe('parseString (sample 1)', () => {
   });
 });
 
+describe('parseString checks non-terminals, not just the skeleton', () => {
+  // Found by the randomized tests: a skeleton-only parser accepted these strings even though
+  // they are not in the language.
+  const parser = (text: string) => {
+    const grammar = parseGrammar(text).grammar!;
+    const { table } = buildPrecedenceTable(grammar, computeLeadingTrailing(grammar));
+    expect(table.isOperatorPrecedence).toBe(true);
+    return (input: string) => parseString(grammar, table, input);
+  };
+
+  it('rejects a string that reduces to a non-terminal the start symbol cannot derive', () => {
+    const p = parser('E -> b | F a ( F\nT -> ( F )\nF -> a');
+    const result = p('a');
+    expect(result.accepted).toBe(false);
+    const last = result.steps.at(-1)!.action;
+    expect(last.type === 'reject' && last.message).toMatch(/start symbol E cannot derive F/);
+    expect(p('a a ( a').accepted).toBe(true);
+    expect(p('b').accepted).toBe(true);
+  });
+
+  it('rejects a handle whose non-terminal is the wrong one', () => {
+    const p = parser('E -> b | T - (\nT -> a | T b');
+    const result = p('b b');
+    expect(result.accepted).toBe(false);
+    const last = result.steps.at(-1)!.action;
+    expect(last.type === 'reject' && last.message).toMatch(/has the shape of T → T b/);
+    expect(p('a b - (').accepted).toBe(true);
+  });
+
+  it('still reduces through unit productions (F counts as T and E)', () => {
+    expect(setup('valid-expr')('id + id * ( id + id )').accepted).toBe(true);
+  });
+});
+
 describe('parseString with a conflicted table (sample 4)', () => {
   it('refuses to parse and explains why', () => {
     const result = setup('ambiguous')('id + id');
