@@ -2,14 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 import { Dialog } from '@ark-ui/react/dialog';
 import { Portal } from '@ark-ui/react/portal';
-import { Menu as MenuIcon, Moon, Sun, X } from 'lucide-react';
+import { Menu as MenuIcon, X } from 'lucide-react';
 import HomePage from './pages/home/HomePage';
 import RegexPage from './pages/regex/RegexPage';
 import BottomUpPage from './pages/parsing/BottomUpPage';
 import PlannedPage from './pages/PlannedPage';
 import { TOPICS, parseHash, topicById, topicHref, type Route } from './app/routes';
-import { useTheme } from './app/theme';
-import { IconButton, cx } from './ui/primitives';
+import { cx } from './ui/primitives';
 import { TopicIcon } from './ui/TopicIcon';
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -22,7 +21,6 @@ export default function App() {
   const [navKey, setNavKey] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const firstRender = useRef(true);
-  const { theme, toggle } = useTheme();
 
   useEffect(() => {
     const onHash = () => {
@@ -101,14 +99,6 @@ export default function App() {
           </nav>
 
           <div className="topbar-actions">
-            <IconButton
-              label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-              onClick={toggle}
-              className="theme-toggle"
-            >
-              {theme === 'dark' ? <Sun size={18} aria-hidden /> : <Moon size={18} aria-hidden />}
-            </IconButton>
-
             <Dialog.Root open={menuOpen} onOpenChange={(d) => setMenuOpen(d.open)}>
               <Dialog.Trigger className="icon-btn icon-btn-secondary menu-trigger" aria-label="Open menu">
                 <MenuIcon size={18} aria-hidden />

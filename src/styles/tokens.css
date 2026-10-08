@@ -6,8 +6,8 @@
  * pairing: JetBrains Mono headings over IBM Plex Sans). Style: Swiss minimalism on an IDE canvas.
  * See docs/DESIGN_SYSTEM.md for the reasoning and the rules.
  *
- * Components only ever read the semantic names below (never raw hex), so both themes come from
- * one set of rules.
+ * Components only ever read the semantic names below (never raw hex). The site has one theme,
+ * light.
  */
 :root {
   --font-sans: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -54,71 +54,8 @@
   :root { --control: 44px; --control-sm: 44px; }
 }
 
-/* ---------- Dark (default) ---------- */
-:root,
-:root[data-theme='dark'] {
-  color-scheme: dark;
-  --bg: #0b1222;
-  --bg-grid: rgb(148 163 184 / 0.07);
-  --surface: #111a2e;
-  --surface-raised: #1b2336;
-  --surface-sunken: #0a101d;
-  --surface-hover: #222c42;
-  --overlay: rgb(3 7 18 / 0.72);
-
-  --fg: #f8fafc;
-  --fg-muted: #a5b1c4;
-  --fg-subtle: #8593a8;
-
-  --line: rgb(148 163 184 / 0.16);
-  --line-strong: rgb(148 163 184 / 0.3);
-  --line-control: #5d6b82; /* ≥ 3:1 against the surface for inputs */
-
-  --primary: #22c55e;
-  --primary-hover: #4ade80;
-  --primary-fg: #052e16;
-  --primary-soft: rgb(34 197 94 / 0.13);
-  --primary-line: rgb(34 197 94 / 0.45);
-
-  --secondary: #818cf8;
-  --secondary-soft: rgb(129 140 248 / 0.16);
-  --secondary-line: rgb(129 140 248 / 0.5);
-
-  --highlight: #f59e0b;
-  --highlight-fg: #fbbf24;
-  --highlight-soft: rgb(245 158 11 / 0.16);
-
-  --success: #22c55e;
-  --success-soft: rgb(34 197 94 / 0.12);
-  --danger: #f87171;
-  --danger-strong: #ef4444;
-  --danger-soft: rgb(239 68 68 / 0.13);
-  --info-soft: rgb(129 140 248 / 0.12);
-
-  --ring: #4ade80;
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
-  --shadow-md: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 16px 40px -24px rgb(0 0 0 / 0.9);
-  --shadow-lg: 0 24px 64px -24px rgb(0 0 0 / 0.85);
-
-  /* Diagram */
-  --node-fill: #16203a;
-  --node-stroke: #64748b;
-  --node-text: #e2e8f0;
-  --edge: #7c8aa2;
-  --edge-muted: rgb(124 138 162 / 0.35);
-  --label-bg: #0f1729;
-
-  /* Partition groups (categorical; minimization only) */
-  --grp-0: rgb(129 140 248 / 0.22); --grp-0-line: #818cf8;
-  --grp-1: rgb(245 158 11 / 0.2);   --grp-1-line: #f59e0b;
-  --grp-2: rgb(34 197 94 / 0.2);    --grp-2-line: #22c55e;
-  --grp-3: rgb(236 72 153 / 0.2);   --grp-3-line: #f472b6;
-  --grp-4: rgb(45 212 191 / 0.2);   --grp-4-line: #2dd4bf;
-  --grp-5: rgb(248 113 113 / 0.2);  --grp-5-line: #f87171;
-}
-
-/* ---------- Light ---------- */
-:root[data-theme='light'] {
+/* ---------- Colours (light only) ---------- */
+:root {
   color-scheme: light;
   --bg: #f6f8fb;
   --bg-grid: rgb(15 23 42 / 0.055);

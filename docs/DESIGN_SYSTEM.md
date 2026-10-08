@@ -18,8 +18,8 @@ algorithms in `src/algorithms/`, the dagre layout in `src/lib/graph/`, the step 
 
 All colours, type sizes, radii, spacing and motion timings live in `src/styles/tokens.css`.
 Components read semantic names only (`--surface`, `--fg-muted`, `--primary`, `--highlight`, …), so
-light and dark come from one set of rules. The theme follows the system setting until the user
-picks one with the sun/moon button; the choice is stored in `localStorage`.
+the palette can change in one place. The site has a single light theme; the dark theme and its
+toggle were removed in October 2026.
 
 Colour meaning in diagrams and tables:
 
@@ -36,7 +36,7 @@ Every colour is paired with a shape or text (halo, double ring, dashed edge, bad
 ## Files
 
 ```
-src/styles/tokens.css      tokens for both themes
+src/styles/tokens.css      tokens (light theme)
 src/styles/base.css        reset, type, buttons, fields, chips, tables, Ark UI parts
 src/styles/shell.css       top bar, drawer, page frame
 src/styles/workbench.css   Regex to DFA workspace, diagram, step bar, inspector

@@ -54,7 +54,7 @@ src/
       TraceView.tsx                   input, trace table, stack rendering
       parts.tsx                       step explanation and disclosure
   ui/                                 shared primitives on Ark UI
-  styles/                             design tokens (light and dark) and component CSS
+  styles/                             design tokens (light theme) and component CSS
   App.tsx                             top bar, mobile drawer and hash routing (#/bottom-up)
 ```
 
