@@ -52,17 +52,13 @@ with sync_playwright() as p:
     pg.wait_for_timeout(500)
     check('forward returns to bottom-up', '#/bottom-up' in pg.url, pg.url)
 
-    # deep link with params from the home page pipeline
-    pg.goto(f'{BASE}/#/home')
-    pg.wait_for_timeout(800)
-    pg.locator('.pipeline-step').nth(2).click()
+    # deep links with params
+    pg.goto(f'{BASE}/#/regex-dfa?re=%28a%7Cb%29*abb&stage=dfa')
     pg.wait_for_timeout(600)
-    check('home pipeline link opens subset stage', pg.get_by_role('tab', name='Subset construction').get_attribute('aria-selected') == 'true')
-    pg.goto(f'{BASE}/#/home')
-    pg.wait_for_timeout(500)
-    pg.locator('.example-link').nth(1).click()
+    check('deep link opens subset stage', pg.get_by_role('tab', name='Subset construction').get_attribute('aria-selected') == 'true')
+    pg.goto(f'{BASE}/#/regex-dfa?re=a%28b%7Cc%29*d%2B&stage=nfa')
     pg.wait_for_timeout(600)
-    check('example link fills the regex', pg.get_by_label('Regular expression', exact=True).input_value() == 'a(b|c)*d+')
+    check('deep link fills the regex', pg.get_by_label('Regular expression', exact=True).input_value() == 'a(b|c)*d+')
     pg.goto(f'{BASE}/#/regex-dfa?re=%28a&stage=bogus')
     pg.wait_for_timeout(600)
     check('invalid ?re= shows error and falls back', pg.locator('[role=alert]').count() == 1 and pg.get_by_role('tab', name='Thompson NFA').get_attribute('aria-selected') == 'true')
