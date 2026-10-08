@@ -114,14 +114,9 @@ with sync_playwright() as p:
     check('list view names start and accepting states', 'start' in acc and 'accepting' in acc)
     pg.get_by_role('radio', name='Diagram').first.click()
 
-    # --- theme toggle persists across reloads ---
-    t0 = pg.evaluate("document.documentElement.dataset.theme")
-    pg.locator('.theme-toggle').click()
-    pg.wait_for_timeout(150)
-    t1 = pg.evaluate("document.documentElement.dataset.theme")
-    pg.reload()
-    pg.wait_for_timeout(600)
-    check('theme toggle switches and persists', t0 != t1 and pg.evaluate("document.documentElement.dataset.theme") == t1, f'{t0}->{t1}')
+    # --- light theme only, no toggle ---
+    check('only the light theme exists (no toggle)', pg.locator('.theme-toggle').count() == 0
+          and pg.evaluate("getComputedStyle(document.body).colorScheme") in ('light', 'normal'))
 
     # --- reset is not adjacent to Next and scrubber has a 24px hit area ---
     h = pg.locator('input[type=range]').first.bounding_box()['height']

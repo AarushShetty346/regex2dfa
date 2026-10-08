@@ -1,22 +1,12 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark light" />
-    <meta name="theme-color" content="#0b1222" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f6f8fb" />
     <meta name="description" content="Interactive compiler-design lab: regular expressions to DFAs, and operator precedence parsing, step by step." />
     <title>Compiler Visualizer</title>
-    <script>
-      // Apply the saved theme (or the system one) before first paint, so there is no flash.
-      (function () {
-        var t;
-        try { t = localStorage.getItem('regex2dfa-theme'); } catch (e) {}
-        if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        document.documentElement.dataset.theme = t;
-        if (t === 'light') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f6f8fb');
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>

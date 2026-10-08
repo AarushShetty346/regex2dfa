@@ -29,8 +29,8 @@ Links to the Regex → DFA page can carry the expression and stage, e.g.
 
 ## Stack
 
-Vite + React + TypeScript, Vitest for tests. The UI is plain CSS on design tokens (light and dark
-themes) over [Ark UI](https://ark-ui.com) primitives for tabs, menus, tooltips, the mobile drawer and
+Vite + React + TypeScript, Vitest for tests. The UI is plain CSS on design tokens (one light
+theme) over [Ark UI](https://ark-ui.com) primitives for tabs, menus, tooltips, the mobile drawer and
 disclosures; see [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md). Graphs are laid out with dagre and
 drawn as SVG; GSAP is the only animation library (step-to-step changes, plus a few React Bits
 components adapted to GSAP) and Lenis smooths page scrolling, both skipped under
