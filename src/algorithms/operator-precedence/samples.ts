@@ -4,7 +4,7 @@ export interface SampleGrammar {
   text: string;
 }
 
-/** Grammars offered in the "Load sample" dropdown. Also used by the unit tests. */
+/** Reference grammars: the first is the page default; all are used by the unit tests. */
 export const SAMPLE_GRAMMARS: SampleGrammar[] = [
   {
     id: 'valid-expr',

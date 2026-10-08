@@ -16,6 +16,12 @@ export interface StackEntry {
    * Non-terminals pushed by a reduction have none.
    */
   relation?: Relation;
+  /**
+   * For a non-terminal pushed by a reduction: every non-terminal this phrase can stand for
+   * (the production's left side plus anything that reaches it through unit productions such
+   * as T → F). Reductions and the final accept check use it.
+   */
+  derives?: string[];
 }
 
 export interface ParseState {
@@ -31,7 +37,7 @@ export type ParseAction =
       /** Symbols popped from the stack, bottom to top. */
       handle: string[];
       production: Production;
-      /** Every production with the same terminal skeleton (normally exactly one). */
+      /** Every production that fits the handle (same terminal skeleton, compatible non-terminals). */
       candidates: Production[];
     }
   | { type: 'accept' }
@@ -97,6 +103,7 @@ export function parseString(grammar: Grammar, table: PrecedenceTable, text: stri
   const tokenError = checkTokens(grammar, tokens);
   if (tokenError) return { tokens, steps: [], accepted: false, error: tokenError };
 
+  const unitUp = unitClosure(grammar);
   let stack: StackEntry[] = [{ symbol: END_MARKER }];
   const input = [...tokens, END_MARKER];
   let ip = 0;
@@ -109,8 +116,16 @@ export function parseString(grammar: Grammar, table: PrecedenceTable, text: stri
     const topTerminal = stack[topIndex].symbol;
     const base = { before, topTerminal, lookahead, highlight: { topTerminalIndex: topIndex } };
 
-    // ACCEPT: the whole input has been reduced to one non-terminal.
+    // ACCEPT: the whole input has been reduced to one non-terminal the start symbol derives.
     if (lookahead === END_MARKER && stack.length === 2 && isNonTerminal(stack[1].symbol)) {
+      const derives = stack[1].derives ?? [stack[1].symbol];
+      if (!derives.includes(grammar.start)) {
+        const message =
+          `The whole input reduced to ${stack[1].symbol}, but the start symbol ${grammar.start} cannot derive ${stack[1].symbol}, ` +
+          `so the string is not in the language.`;
+        steps.push(rejectStep(base, before, message));
+        return { tokens, steps, accepted: false };
+      }
       steps.push({
         ...base,
         action: { type: 'accept' },
@@ -159,10 +174,15 @@ export function parseString(grammar: Grammar, table: PrecedenceTable, text: stri
     const handleEntries = stack.slice(start);
     const handle = handleEntries.map((e) => e.symbol);
     const handleRange = { start, end: stack.length - 1 };
-    const candidates = matchBySkeleton(grammar, handle);
+    const shaped = matchBySkeleton(grammar, handle);
+    const candidates = shaped.filter((p) => fitsHandle(p, handleEntries));
 
     if (candidates.length === 0) {
-      const message = `The handle "${handle.join(' ')}" has terminal skeleton "${skeleton(handle).join(' ')}", which matches no production body.`;
+      const message =
+        shaped.length === 0
+          ? `The handle "${handle.join(' ')}" has terminal skeleton "${skeleton(handle).join(' ')}", which matches no production body.`
+          : `The handle "${handle.join(' ')}" has the shape of ${shaped.map(formatProduction).join(', ')}, but its non-terminals ` +
+            `cannot stand for the ones that production needs, so the string is not in the language.`;
       steps.push({
         ...rejectStep(base, before, message),
         relation,
@@ -172,7 +192,8 @@ export function parseString(grammar: Grammar, table: PrecedenceTable, text: stri
     }
 
     const production = candidates[0];
-    stack = [...stack.slice(0, start), { symbol: production.lhs }];
+    const derives = [...new Set(candidates.flatMap((p) => unitUp[p.lhs]))];
+    stack = [...stack.slice(0, start), { symbol: production.lhs, derives }];
     const alsoMatches =
       candidates.length > 1
         ? ` (Also matches ${candidates.slice(1).map(formatProduction).join(', ')}; the first one is used.)`
@@ -256,6 +277,35 @@ function matchBySkeleton(grammar: Grammar, handle: string[]): Production[] {
     const body = skeleton(p.rhs);
     return body.length === target.length && body.every((s, i) => s === target[i]);
   });
+}
+
+/**
+ * The skeleton alone is too loose: in E → b | F a ( F with F → a, the handle "a" reduces to F,
+ * and a skeleton-only parser would then accept "a" because the stack is "$ N". So each
+ * non-terminal on the stack remembers which non-terminals it can stand for, and a production
+ * fits only if every non-terminal it expects is one of those.
+ */
+function fitsHandle(p: Production, handle: StackEntry[]): boolean {
+  return p.rhs.every((sym, i) => !isNonTerminal(sym) || (handle[i].derives ?? [handle[i].symbol]).includes(sym));
+}
+
+/** For every non-terminal X, all A with A ⇒* X through unit productions (A → B), X included. */
+function unitClosure(grammar: Grammar): Record<string, string[]> {
+  const up: Record<string, Set<string>> = Object.fromEntries(grammar.nonTerminals.map((X) => [X, new Set([X])]));
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const p of grammar.productions) {
+      if (p.rhs.length !== 1 || !isNonTerminal(p.rhs[0])) continue;
+      // A → B: any phrase that can stand for B can stand for A too.
+      for (const X of grammar.nonTerminals)
+        if (up[X].has(p.rhs[0]) && !up[X].has(p.lhs)) {
+          up[X].add(p.lhs);
+          changed = true;
+        }
+    }
+  }
+  return Object.fromEntries(Object.entries(up).map(([X, s]) => [X, [...s]]));
 }
 
 function skeleton(symbols: string[]): string[] {
