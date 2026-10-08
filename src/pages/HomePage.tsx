@@ -95,9 +95,13 @@ export default function HomePage() {
   useLayoutEffect(() => {
     if (!ref.current || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = gsap.context(() => {
-      gsap.from('[data-hero]', { opacity: 0, y: 24, duration: 0.8, ease: 'power3.out', stagger: 0.08 });
-      gsap.from('.hero-demo', { opacity: 0, scale: 0.97, duration: 1, ease: 'power3.out', delay: 0.2 });
-      gsap.from('.topic', { opacity: 0, y: 20, duration: 0.6, ease: 'power3.out', stagger: 0.07, delay: 0.35 });
+      // fromTo with explicit end values: a plain `from` reads the current transform as its target, and
+      // the cards' CSS transform transition (or StrictMode's second run) can leave that mid-animation,
+      // which used to strand the cards 20px low. clearProps hands transform back to CSS afterwards.
+      const done = { opacity: 1, y: 0, scale: 1, clearProps: 'opacity,transform' };
+      gsap.fromTo('[data-hero]', { opacity: 0, y: 24 }, { ...done, duration: 0.8, ease: 'power3.out', stagger: 0.08 });
+      gsap.fromTo('.hero-demo', { opacity: 0, scale: 0.97 }, { ...done, duration: 1, ease: 'power3.out', delay: 0.2 });
+      gsap.fromTo('.topic', { opacity: 0, y: 20, transition: 'none' }, { ...done, duration: 0.6, ease: 'power3.out', stagger: 0.07, delay: 0.35, clearProps: 'opacity,transform,transition' });
     }, ref);
     return () => ctx.revert();
   }, []);

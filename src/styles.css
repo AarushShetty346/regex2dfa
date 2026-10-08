@@ -175,7 +175,9 @@ input::placeholder { color: var(--faint); }
   display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(1.5rem, 4vw, 3.5rem);
   align-items: center; padding-top: clamp(0.5rem, 4vw, 3.5rem);
 }
-.hero h1 { font-size: clamp(2.3rem, 4.6vw, 3.6rem); line-height: 1.04; letter-spacing: -0.04em; font-weight: 680; margin: 0 0 1.1rem; }
+.hero-copy { container-type: inline-size; }
+/* Sized to the copy column so "one step at a time." always fits on one line. */
+.hero h1 { font-size: clamp(2rem, 11cqi, 3.6rem); text-wrap: balance; line-height: 1.04; letter-spacing: -0.04em; font-weight: 680; margin: 0 0 1.1rem; }
 .hero .lede { font-size: 1.1rem; margin-bottom: 1.75rem; max-width: 42ch; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 .hero-actions .button { padding: 0.65rem 1.1rem; font-size: 0.95rem; }
@@ -388,13 +390,14 @@ input::placeholder { color: var(--faint); }
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1100px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
   .stage { grid-template-columns: minmax(0, 1fr); }
   .stage-rail { position: static; }
   .pipeline { grid-template-columns: repeat(5, minmax(172px, 1fr)); overflow-x: auto; scrollbar-width: none; }
 }
 
 @media (max-width: 900px) {
-  .regex-header, .hero { grid-template-columns: minmax(0, 1fr); }
+  .regex-header { grid-template-columns: minmax(0, 1fr); }
   .topics { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .topic-0 { grid-row: auto; grid-column: span 2; min-height: 180px; }
   .topic-1 { grid-column: span 2; }
