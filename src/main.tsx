@@ -1,9 +1,13 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import '@fontsource-variable/geist';
-import '@fontsource-variable/geist-mono';
+import '@fontsource-variable/ibm-plex-sans';
+import '@fontsource-variable/jetbrains-mono';
+import './styles/tokens.css';
+import './styles/base.css';
+import './styles/shell.css';
+import './styles/workbench.css';
+import './styles/pages.css';
 import App from './App';
-import './styles.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,30 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
-import { FlowArrow, House, List, ListChecks, Stack, TreeView, X } from '@phosphor-icons/react';
-import HomePage from './pages/HomePage';
-import BottomUpParsingPage from './pages/BottomUpParsingPage';
-import RegexToDfaPage from './pages/RegexToDfaPage';
-import ComingSoon from './components/ComingSoon';
-import { TOPICS, parseHash, topicById, topicHref, type Route, type TopicId } from './app/routes';
-
-const ICONS: Record<TopicId, React.ReactNode> = {
-  home: <House size={18} aria-hidden />,
-  'regex-dfa': <FlowArrow size={18} aria-hidden />,
-  'bottom-up': <Stack size={18} aria-hidden />,
-  'first-follow': <ListChecks size={18} aria-hidden />,
-  'top-down': <TreeView size={18} aria-hidden />,
-};
+import { Dialog } from '@ark-ui/react/dialog';
+import { Portal } from '@ark-ui/react/portal';
+import { Menu as MenuIcon, Moon, Sun, X } from 'lucide-react';
+import HomePage from './pages/home/HomePage';
+import RegexPage from './pages/regex/RegexPage';
+import BottomUpPage from './pages/parsing/BottomUpPage';
+import PlannedPage from './pages/PlannedPage';
+import { TOPICS, parseHash, topicById, topicHref, type Route } from './app/routes';
+import { useTheme } from './app/theme';
+import { IconButton, cx } from './ui/primitives';
+import { TopicIcon } from './ui/TopicIcon';
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export default function App() {
   const [route, setRoute] = useState<Route>(() => parseHash(window.location.hash));
-  // Remount the page when the hash changes from outside (links, back/forward), so a page that
-  // reads its query (e.g. ?re=) starts from it. Pages that rewrite their own query use
+  // Remount the page when the hash changes from outside (links, back/forward) so a page that
+  // reads its query (?re=, ?stage=) starts from it. Pages that rewrite their own query use
   // history.replaceState, which does not fire hashchange.
   const [navKey, setNavKey] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const firstRender = useRef(true);
+  const { theme, toggle } = useTheme();
 
   useEffect(() => {
     const onHash = () => {
@@ -37,8 +35,8 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
-  // Title per page, and move focus to the new page's heading so screen-reader and keyboard
-  // users land at the start of the content after navigating.
+  // A title per page, and focus on the new page's heading so keyboard and screen-reader users
+  // start at the content after navigating.
   useEffect(() => {
     const label = topicById(route.page).label;
     document.title = route.page === 'home' ? 'Compiler Visualizer' : `${label} · Compiler Visualizer`;
@@ -49,72 +47,102 @@ export default function App() {
     document.querySelector<HTMLElement>('main h1')?.focus({ preventScroll: true });
   }, [route.page, navKey]);
 
-  // Smooth wheel scrolling for the page. Skipped when the user prefers reduced motion.
+  // Smooth wheel scrolling, skipped for reduced motion.
   useEffect(() => {
     if (prefersReducedMotion()) return;
-    const lenis = new Lenis({ autoRaf: true, lerp: 0.12 });
+    const lenis = new Lenis({ autoRaf: true, lerp: 0.14 });
     return () => lenis.destroy();
   }, []);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false);
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [menuOpen]);
+  const links = (onPick?: () => void) =>
+    TOPICS.map((t) => {
+      const active = route.page === t.id;
+      return (
+        <li key={t.id}>
+          <a
+            href={topicHref(t.id)}
+            className={cx('nav-link', active && 'is-active', t.status === 'planned' && 'is-planned')}
+            aria-current={active ? 'page' : undefined}
+            onClick={onPick}
+          >
+            <TopicIcon id={t.id} size={16} />
+            <span>{t.label}</span>
+            {t.status === 'planned' && <span className="nav-soon">Soon</span>}
+          </a>
+        </li>
+      );
+    });
 
   return (
-    <div className="app">
-      <a className="skip-link" href="#main" onClick={(e) => {
-        e.preventDefault();
-        document.getElementById('main')?.focus();
-      }}>
+    <div className="shell">
+      <a
+        className="skip-link"
+        href="#main"
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById('main')?.focus();
+        }}
+      >
         Skip to content
       </a>
-      <header className="shell-nav">
-        <div className="shell-bar">
-          <a className="brand" href={topicHref('home')}>
+
+      <header className="topbar">
+        <div className="topbar-inner">
+          <a className="brand" href={topicHref('home')} aria-label="Compiler Visualizer, home">
             <BrandMark />
-            <span className="brand-name">Compiler Visualizer</span>
+            <span className="brand-text">
+              <span className="brand-name">Compiler Visualizer</span>
+              <span className="brand-sub">regex2dfa</span>
+            </span>
           </a>
-          <button
-            type="button"
-            className="menu-toggle icon-button"
-            aria-expanded={menuOpen}
-            aria-controls="topic-nav"
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            onClick={() => setMenuOpen((o) => !o)}
-          >
-            {menuOpen ? <X size={18} aria-hidden /> : <List size={18} aria-hidden />}
-          </button>
+
+          <nav className="topnav" aria-label="Modules">
+            <ul>{links()}</ul>
+          </nav>
+
+          <div className="topbar-actions">
+            <IconButton
+              label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+              onClick={toggle}
+              className="theme-toggle"
+            >
+              {theme === 'dark' ? <Sun size={18} aria-hidden /> : <Moon size={18} aria-hidden />}
+            </IconButton>
+
+            <Dialog.Root open={menuOpen} onOpenChange={(d) => setMenuOpen(d.open)}>
+              <Dialog.Trigger className="icon-btn icon-btn-secondary menu-trigger" aria-label="Open menu">
+                <MenuIcon size={18} aria-hidden />
+              </Dialog.Trigger>
+              <Portal>
+                <Dialog.Backdrop className="drawer-backdrop" />
+                <Dialog.Positioner className="drawer-positioner">
+                  <Dialog.Content className="drawer">
+                    <div className="drawer-head">
+                      <Dialog.Title className="drawer-title">Modules</Dialog.Title>
+                      <Dialog.CloseTrigger className="icon-btn icon-btn-ghost" aria-label="Close menu">
+                        <X size={18} aria-hidden />
+                      </Dialog.CloseTrigger>
+                    </div>
+                    <nav aria-label="Modules">
+                      <ul className="drawer-links">{links(() => setMenuOpen(false))}</ul>
+                    </nav>
+                    <p className="drawer-foot">Everything runs in your browser.</p>
+                  </Dialog.Content>
+                </Dialog.Positioner>
+              </Portal>
+            </Dialog.Root>
+          </div>
         </div>
-        <nav id="topic-nav" className={`topic-nav${menuOpen ? ' open' : ''}`} aria-label="Modules">
-          {(['available', 'planned'] as const).map((status) => (
-            <div key={status} className="nav-group">
-              <p className="nav-group-label" id={`nav-${status}`}>
-                {status === 'available' ? 'Available' : 'Planned'}
-              </p>
-              <ul aria-labelledby={`nav-${status}`}>
-                {TOPICS.filter((t) => t.status === status).map((t) => {
-                  const active = route.page === t.id;
-                  return (
-                    <li key={t.id}>
-                      <a href={topicHref(t.id)} className={active ? 'active' : undefined} aria-current={active ? 'page' : undefined}>
-                        {ICONS[t.id]}
-                        <span className="nav-label">{t.label}</span>
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-          <p className="nav-foot">Runs entirely in your browser.</p>
-        </nav>
       </header>
-      <main id="main" className="content" tabIndex={-1}>
+
+      <main id="main" className="main" tabIndex={-1}>
         {renderPage(route, navKey)}
       </main>
+
+      <footer className="footer">
+        <span>Compiler Visualizer · every algorithm runs locally in your browser.</span>
+        <span className="footer-mono">regex → ε-NFA → DFA → min-DFA</span>
+      </footer>
     </div>
   );
 }
@@ -124,20 +152,23 @@ function renderPage({ page, params }: Route, navKey: number) {
     case 'home':
       return <HomePage />;
     case 'regex-dfa':
-      return <RegexToDfaPage key={navKey} params={params} />;
+      return <RegexPage key={navKey} params={params} />;
     case 'bottom-up':
-      return <BottomUpParsingPage />;
+      return <BottomUpPage />;
     default:
-      return <ComingSoon topic={topicById(page)} />;
+      return <PlannedPage topic={topicById(page)} />;
   }
 }
 
-/** Two concentric states: the accepting-state convention, used as the product mark. */
+/** A start arrow into an accepting state: the smallest complete automaton, used as the mark. */
 function BrandMark() {
   return (
-    <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden className="brand-mark">
-      <circle cx="16" cy="16" r="13" className="brand-outer" />
-      <circle cx="16" cy="16" r="8" className="brand-inner" />
+    <svg viewBox="0 0 36 36" width="32" height="32" aria-hidden className="brand-mark">
+      <rect x="0.5" y="0.5" width="35" height="35" rx="9" className="brand-tile" />
+      <path d="M5 18 H12" className="brand-arrow" />
+      <path d="M10 15 L13 18 L10 21" className="brand-arrow" />
+      <circle cx="22" cy="18" r="8" className="brand-ring" />
+      <circle cx="22" cy="18" r="4.5" className="brand-core" />
     </svg>
   );
 }

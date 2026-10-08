@@ -1,7 +1,8 @@
 """Capture semantic outputs of the app (baseline or redesign) through the real UI.
 
 Usage: python3 -I capture.py <base-url> <out.json>
-Relies only on accessible names and a few data attributes that both versions share.
+Relies only on accessible names and a few data attributes that every version shares
+(accepting rings are `.node-ring` before the Ark UI rebuild and `[data-accepting]` after it).
 """
 import json, sys
 from playwright.sync_api import sync_playwright
@@ -17,9 +18,9 @@ STAGES = ['Syntax tree', 'Thompson NFA', 'Subset construction', 'Minimize', 'Tes
 GRAPH_JS = r"""() => [...document.querySelectorAll('main svg[role=img]')].filter(s => !s.closest('.hero-demo, [data-demo]')).map(svg => ({
   nodes: [...svg.querySelectorAll('[data-node]')].map(g => {
     const t = g.querySelector('text');
-    return (t ? t.textContent : '?') + (g.querySelector('.node-ring') ? '(acc)' : '') + (g.querySelector('[data-start], path') ? '(start)' : '');
+    return (t ? t.textContent : '?') + (g.querySelector('.node-ring, [data-accepting]') ? '(acc)' : '') + (g.querySelector('[data-start], path') ? '(start)' : '');
   }).sort(),
-  edges: [...svg.querySelectorAll('[data-edge-label]')].map(t => t.getAttribute('data-from') ? t.textContent : t.textContent).sort(),
+  edges: [...svg.querySelectorAll('[data-edge-label]')].map(t => t.textContent).filter(Boolean).sort(),
 }))"""
 
 TABLES_JS = r"""() => [...document.querySelectorAll('main table')].map(t => [...t.querySelectorAll('tr')].map(r => [...r.children].map(c => c.textContent.replace(/\s+/g, ' ').trim()).join(' | ')))"""

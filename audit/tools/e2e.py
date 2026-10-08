@@ -1,4 +1,4 @@
-"""Browser checks for the redesign: navigation, deep links, keyboard, graph tools, motion.
+"""Browser checks for the UI: navigation, deep links, keyboard, graph tools, motion, theme.
 Usage: python3 -I e2e.py <base-url> <shots-dir>"""
 import sys, json
 from playwright.sync_api import sync_playwright
@@ -25,7 +25,10 @@ with sync_playwright() as p:
     pg.goto(f'{BASE}/#/home')
     pg.wait_for_timeout(1500)
     check('home title', pg.title() == 'Compiler Visualizer', pg.title())
-    op = pg.evaluate("Math.min(...[...document.querySelectorAll('[data-hero],[data-rise],.hero-demo')].map(e => +getComputedStyle(e).opacity))")
+    pg.mouse.wheel(0, 6000)
+    pg.wait_for_timeout(1800)
+    op = pg.evaluate("Math.min(...[...document.querySelectorAll('.hero-copy > *, .hero-demo, .block-head, .pipeline > li, .module-grid > li, .example-list > li, .split-word')].map(e => +getComputedStyle(e).opacity))")
+    pg.evaluate("window.scrollTo(0, 0)")
     check('home entrance animation settles to full opacity', op == 1, str(op))
     pg.screenshot(path=f'{SHOTS}/motion-home-1440.jpg', type='jpeg', quality=72)
     pg.get_by_role('link', name='Regex to DFA').first.click()
@@ -52,18 +55,18 @@ with sync_playwright() as p:
     # deep link with params from the home page pipeline
     pg.goto(f'{BASE}/#/home')
     pg.wait_for_timeout(800)
-    pg.locator('.pipeline-node').nth(2).click()
+    pg.locator('.pipeline-step').nth(2).click()
     pg.wait_for_timeout(600)
     check('home pipeline link opens subset stage', pg.get_by_role('tab', name='Subset construction').get_attribute('aria-selected') == 'true')
     pg.goto(f'{BASE}/#/home')
     pg.wait_for_timeout(500)
-    pg.locator('.example-links a').nth(1).click()
+    pg.locator('.example-link').nth(1).click()
     pg.wait_for_timeout(600)
     check('example link fills the regex', pg.get_by_label('Regular expression', exact=True).input_value() == 'a(b|c)*d+')
     pg.goto(f'{BASE}/#/regex-dfa?re=%28a&stage=bogus')
     pg.wait_for_timeout(600)
     check('invalid ?re= shows error and falls back', pg.locator('[role=alert]').count() == 1 and pg.get_by_role('tab', name='Thompson NFA').get_attribute('aria-selected') == 'true')
-    check('stale-result note shown for invalid input', pg.locator('.stale-note').count() == 1)
+    check('stale-result note shown for invalid input', pg.locator('.stale-banner').count() == 1)
     pg.goto(f'{BASE}/#/does-not-exist')
     pg.wait_for_timeout(400)
     check('unknown route falls back to home', pg.locator('main h1').text_content().startswith('Compiler algorithms'))
@@ -93,7 +96,7 @@ with sync_playwright() as p:
     # --- graph tools ---
     pg.get_by_role('tab', name='Minimize').click()
     pg.wait_for_timeout(300)
-    svg = pg.locator('.graph-scroll svg').first
+    svg = pg.locator('.diagram-canvas svg').first
     w0 = svg.bounding_box()['width']
     pg.get_by_role('button', name='Zoom in').click()
     pg.get_by_role('button', name='Zoom in').click()
@@ -103,13 +106,22 @@ with sync_playwright() as p:
     pg.get_by_role('button', name='Fit to view').click()
     pg.wait_for_timeout(200)
     check('fit restores size', abs(svg.bounding_box()['width'] - w0) < 2)
-    pg.get_by_role('button', name='List').first.click()
+    pg.get_by_role('radio', name='Table').first.click()
     pg.wait_for_timeout(200)
-    rows = pg.locator('.graph-list tbody tr').count()
+    rows = pg.locator('.diagram-table tbody tr').count()
     check('list view shows one row per state (5 before minimization)', rows == 5, str(rows))
-    acc = pg.locator('.graph-list').text_content()
+    acc = pg.locator('.diagram-table').text_content()
     check('list view names start and accepting states', 'start' in acc and 'accepting' in acc)
-    pg.get_by_role('button', name='Diagram').first.click()
+    pg.get_by_role('radio', name='Diagram').first.click()
+
+    # --- theme toggle persists across reloads ---
+    t0 = pg.evaluate("document.documentElement.dataset.theme")
+    pg.locator('.theme-toggle').click()
+    pg.wait_for_timeout(150)
+    t1 = pg.evaluate("document.documentElement.dataset.theme")
+    pg.reload()
+    pg.wait_for_timeout(600)
+    check('theme toggle switches and persists', t0 != t1 and pg.evaluate("document.documentElement.dataset.theme") == t1, f'{t0}->{t1}')
 
     # --- reset is not adjacent to Next and scrubber has a 24px hit area ---
     h = pg.locator('input[type=range]').first.bounding_box()['height']
@@ -122,18 +134,19 @@ with sync_playwright() as p:
     pg.on('pageerror', lambda e: errors.append(str(e)))
     pg.goto(f'{BASE}/#/home')
     pg.wait_for_timeout(800)
-    check('mobile nav hidden by default', not pg.locator('#topic-nav a').first.is_visible())
+    check('mobile nav hidden by default', not pg.get_by_role('dialog').is_visible() and not pg.locator('.topnav').is_visible())
     pg.get_by_role('button', name='Open menu').click()
     pg.wait_for_timeout(200)
-    check('menu opens', pg.locator('#topic-nav a').first.is_visible())
+    check('menu opens', pg.get_by_role('dialog').is_visible())
     pg.screenshot(path=f'{SHOTS}/mobile-menu-390.jpg', type='jpeg', quality=72)
     pg.keyboard.press('Escape')
     pg.wait_for_timeout(200)
-    check('Escape closes menu', not pg.locator('#topic-nav a').first.is_visible())
+    check('Escape closes menu', pg.get_by_role('dialog').count() == 0 or not pg.get_by_role('dialog').is_visible())
     pg.get_by_role('button', name='Open menu').click()
-    pg.get_by_role('link', name='Bottom-up parsing').first.click()
-    pg.wait_for_timeout(500)
-    check('choosing a page closes menu', not pg.locator('#topic-nav a').first.is_visible() and '#/bottom-up' in pg.url)
+    pg.wait_for_timeout(300)
+    pg.get_by_role('dialog').get_by_role('link', name='Bottom-up parsing').click()
+    pg.wait_for_timeout(600)
+    check('choosing a page closes menu', (pg.get_by_role('dialog').count() == 0 or not pg.get_by_role('dialog').is_visible()) and '#/bottom-up' in pg.url)
     sizes = pg.evaluate("""[...document.querySelectorAll('main button, main select, main input, main a')].filter(e => e.offsetParent).map(e => { const r = e.getBoundingClientRect(); return Math.min(r.width, r.height); })""")
     small = [s for s in sizes if s < 24]
     check('no visible control under 24px on touch', not small, str(small[:5]))
