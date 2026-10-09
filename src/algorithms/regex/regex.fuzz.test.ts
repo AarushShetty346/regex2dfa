@@ -118,6 +118,24 @@ describe('direct method: structural invariants on random expressions', () => {
     }
   });
 
+  it('the tree builds node by node like a postfix stack machine', () => {
+    for (const src of samples) {
+      const { direct } = regexPipeline(src);
+      const byId = new Map(postOrder(direct.tree).map((n) => [n.id, n]));
+      let stack: number[] = [];
+      for (const step of direct.buildSteps) {
+        const n = byId.get(step.nodeId)!;
+        const arity = n.kind === 'concat' || n.kind === 'union' ? 2 : n.kind === 'symbol' || n.kind === 'epsilon' ? 0 : 1;
+        const kids = arity === 2 && 'left' in n ? [n.left.id, n.right.id] : arity === 1 && 'child' in n ? [n.child.id] : [];
+        // The operands of each operator are exactly the subtrees on top of the stack.
+        expect(stack.slice(stack.length - arity), src).toEqual(arity ? kids : []);
+        stack = [...stack.slice(0, stack.length - arity), n.id];
+        expect(step.stack, src).toEqual(stack);
+      }
+      expect(stack, src).toEqual([direct.tree.id]);
+    }
+  });
+
   it('nullable, firstpos and lastpos match a brute-force reading of each subtree', () => {
     for (const src of samples) {
       const { direct } = regexPipeline(src);

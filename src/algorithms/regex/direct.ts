@@ -2,6 +2,7 @@
  * Direct construction of a DFA from a regular expression (Dragon Book §3.9.5).
  *
  * 1. Augment the expression to (r)#, so reaching the end marker # means "accept".
+ *    The tree is built node by node from the postfix form, with a stack of subtrees.
  * 2. Number every symbol leaf with a position, left to right (# gets the last one).
  * 3. Compute nullable, firstpos and lastpos for every node, bottom-up.
  * 4. Compute followpos from the concatenation and star (and plus) nodes.
@@ -9,7 +10,7 @@
  *
  * No NFA is built. Each phase returns its own step list so the UI can replay it.
  */
-import { postOrder, type RegexNode } from './parse';
+import { EPSILON, postOrder, regexToString, type RegexNode } from './parse';
 import { setText, stateName, type DFA, type DfaState, type DfaTransition } from './dfa';
 
 export const END_MARKER = '#';
@@ -27,6 +28,17 @@ export interface NodeFacts {
   nullable: boolean;
   firstpos: number[];
   lastpos: number[];
+}
+
+/** One node of the augmented tree being created, in postfix (post-order) order. */
+export interface BuildStep {
+  nodeId: number;
+  /** The postfix token read in this step. */
+  token: string;
+  title: string;
+  detail: string;
+  /** Roots of the subtrees on the stack after this step, bottom first. */
+  stack: number[];
 }
 
 /** One node's nullable, firstpos and lastpos, in post-order. */
@@ -74,6 +86,7 @@ export interface DirectResult {
   positions: Position[];
   endPos: number;
   facts: Record<number, NodeFacts>;
+  buildSteps: BuildStep[];
   functionSteps: FunctionStep[];
   /** Final followpos, indexed by position (index 0 unused). */
   followpos: number[][];
@@ -121,6 +134,65 @@ export function directConstruction(tree: RegexNode, alphabet: string[]): DirectR
     posOf.set(n.id, pos);
   }
   const endPos = positions.length;
+
+  // Build the tree from the postfix form: a leaf is pushed, an operator pops its operands.
+  const buildSteps: BuildStep[] = [];
+  const stack: number[] = [];
+  const show = (n: RegexNode) => regexToString(n);
+  for (const n of order) {
+    let token: string;
+    let title: string;
+    let detail: string;
+    switch (n.kind) {
+      case 'symbol': {
+        const p = posOf.get(n.id)!;
+        token = n.symbol;
+        if (n === marker) {
+          title = `Leaf # (end marker), position ${p}`;
+          detail = `The expression is augmented with the end marker #. It becomes a leaf with the last position, ${p}, so reaching it means the input matched.`;
+        } else {
+          title = `Leaf ${n.symbol}, position ${p}`;
+          detail = `Read the symbol ${n.symbol}. It becomes a leaf and gets position ${p}; leaves are numbered left to right. The leaf is pushed as a new subtree.`;
+        }
+        break;
+      }
+      case 'epsilon':
+        token = EPSILON;
+        title = 'Leaf ε';
+        detail = 'Read ε. It becomes a leaf that matches only the empty string. It gets no position, because it holds no input symbol.';
+        break;
+      case 'union':
+      case 'concat': {
+        const op = n.kind === 'union' ? '|' : '•';
+        token = op;
+        stack.splice(-2);
+        if (n === root) {
+          title = `Root • node: (${show(n.left)}) • #`;
+          detail = `Concatenate the whole expression with #. The • node takes the tree of the expression as its left child and the # leaf as its right child. This is the root of the augmented tree (r)#.`;
+        } else {
+          title = `${op} node: ${show(n)}`;
+          detail =
+            n.kind === 'union'
+              ? `Read |. It takes the top two subtrees, ${show(n.left)} and ${show(n.right)}, as its left and right children (either one may match).`
+              : `Read • (concatenation). It takes the top two subtrees, ${show(n.left)} and ${show(n.right)}, as its left and right children (left then right).`;
+        }
+        break;
+      }
+      case 'star':
+      case 'plus':
+      case 'optional': {
+        const op = { star: '*', plus: '+', optional: '?' }[n.kind];
+        const meaning = { star: 'zero or more times', plus: 'one or more times', optional: 'zero or one time' }[n.kind];
+        token = op;
+        stack.pop();
+        title = `${op} node: ${show(n)}`;
+        detail = `Read ${op}. It takes the top subtree, ${show(n.child)}, as its only child: that part may appear ${meaning}.`;
+        break;
+      }
+    }
+    stack.push(n.id);
+    buildSteps.push({ nodeId: n.id, token, title, detail, stack: [...stack] });
+  }
 
   // 3. nullable, firstpos, lastpos.
   const facts: Record<number, NodeFacts> = {};
@@ -273,5 +345,5 @@ export function directConstruction(tree: RegexNode, alphabet: string[]): DirectR
     }
   }
 
-  return { tree: root, positions, endPos, facts, functionSteps, followpos: follow, followSteps, dfa: snapshot(), dfaSteps };
+  return { tree: root, positions, endPos, facts, buildSteps, functionSteps, followpos: follow, followSteps, dfa: snapshot(), dfaSteps };
 }

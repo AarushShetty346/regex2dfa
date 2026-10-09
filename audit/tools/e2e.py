@@ -84,7 +84,7 @@ with sync_playwright() as p:
     pg.get_by_role('tab', name='Syntax tree').focus()
     pg.keyboard.press('ArrowRight')
     pg.wait_for_timeout(200)
-    check('ArrowRight on tabs moves to next stage', pg.get_by_role('tab', name='followpos').get_attribute('aria-selected') == 'true')
+    check('ArrowRight on tabs moves to next stage', pg.get_by_role('tab', name='firstpos & lastpos').get_attribute('aria-selected') == 'true')
     check('ArrowRight on tabs does not also step', pg.locator('input[type=range]').input_value() == '0')
     pg.keyboard.press('End')
     pg.wait_for_timeout(200)
