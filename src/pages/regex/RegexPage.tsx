@@ -5,6 +5,7 @@ import { RegexSyntaxError, regexPipeline, type Pipeline } from '../../algorithms
 import { DEFAULT_REGEX, STAGES, isStage, type Stage } from '../../lib/regexExamples';
 import { PageIntro, cx } from '../../ui/primitives';
 import TreeStage from './stages/TreeStage';
+import PositionsStage from './stages/PositionsStage';
 import FollowposStage from './stages/FollowposStage';
 import DfaStage from './stages/DfaStage';
 import SimulateStage from './stages/SimulateStage';
@@ -49,7 +50,8 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
   }, [shownSrc, stage]);
 
   const counts: Record<Stage, string> = {
-    tree: `${pipeline.direct.positions.length} positions`,
+    tree: `${pipeline.direct.buildSteps.length} nodes`,
+    pos: `${pipeline.direct.positions.length} positions`,
     follow: `${pipeline.direct.followSteps.length} rules`,
     dfa: `${pipeline.direct.dfa.states.length} states`,
     test: 'run',
@@ -59,7 +61,7 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
   return (
     <div className="page page-wide">
       <PageIntro kicker="Module 01 · Finite automata" title="Regex to DFA">
-        Type a regular expression and build its DFA with the direct method: an augmented syntax tree, nullable, firstpos and lastpos,
+        Type a regular expression and build its DFA with the direct method: an augmented syntax tree built node by node, nullable, firstpos and lastpos,
         then followpos. Test strings on the result.
       </PageIntro>
 
@@ -163,6 +165,7 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
             {stage === s.id && (
               <div ref={stageRef} key={`${stage}|${shownSrc}`}>
                 {s.id === 'tree' && <TreeStage direct={pipeline.direct} />}
+                {s.id === 'pos' && <PositionsStage direct={pipeline.direct} />}
                 {s.id === 'follow' && <FollowposStage direct={pipeline.direct} />}
                 {s.id === 'dfa' && <DfaStage direct={pipeline.direct} />}
                 {s.id === 'test' && <SimulateStage dfa={pipeline.direct.dfa} />}

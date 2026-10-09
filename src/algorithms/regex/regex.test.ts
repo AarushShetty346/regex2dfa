@@ -84,6 +84,21 @@ describe('Dragon Book example (a|b)*abb, direct method', () => {
     expect(direct.positions.at(-1)!.end).toBe(true);
   });
 
+  it('builds the augmented tree node by node from the postfix form', () => {
+    const steps = direct.buildSteps;
+    expect(steps.map((s) => s.token).join(' ')).toBe('a b | * a • b • b • # •');
+    expect(steps).toHaveLength(Object.keys(direct.facts).length);
+    // Every node is created once, after its children, and the last step creates the root.
+    expect(new Set(steps.map((s) => s.nodeId)).size).toBe(steps.length);
+    expect(steps.at(-1)!.nodeId).toBe(direct.tree.id);
+    expect(steps.at(-1)!.stack).toEqual([direct.tree.id]);
+    // After reading a b the stack holds two leaves; | then joins them into one subtree.
+    expect(steps[1].stack).toHaveLength(2);
+    expect(steps[2].stack).toHaveLength(1);
+    expect(steps[0].title).toBe('Leaf a, position 1');
+    expect(steps.at(-2)!.title).toBe('Leaf # (end marker), position 6');
+  });
+
   it('computes firstpos and lastpos of the root', () => {
     const root = direct.facts[direct.tree.id];
     expect(root).toEqual({ nullable: false, firstpos: [1, 2, 3], lastpos: [6] });

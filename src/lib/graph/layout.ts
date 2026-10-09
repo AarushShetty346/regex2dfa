@@ -151,6 +151,7 @@ export function layoutGraph(
 /**
  * Tidy top-down layout for a tree whose edges go parent → child in left-to-right order.
  * (dagre is free to reorder siblings, which would swap the operands of a syntax tree.)
+ * A forest (a tree still being built) is laid out with its roots side by side, in node order.
  */
 function layoutTree(nodes: GraphNode[], edges: GraphEdge[]): Layout {
   const kids = new Map<string, string[]>();
@@ -161,7 +162,7 @@ function layoutTree(nodes: GraphNode[], edges: GraphEdge[]): Layout {
     hasParent.add(e.to);
   }
   const byId = new Map(nodes.map((n) => [n.id, n]));
-  const root = nodes.find((n) => !hasParent.has(n.id));
+  const roots = nodes.filter((n) => !hasParent.has(n.id));
   const pos = new Map<string, PositionedNode>();
   const STEP_X = 52;
   const STEP_Y = 78;
@@ -179,7 +180,10 @@ function layoutTree(nodes: GraphNode[], edges: GraphEdge[]): Layout {
     maxY = Math.max(maxY, y);
     return x;
   };
-  if (root) place(root.id, 0);
+  roots.forEach((r, i) => {
+    if (i > 0) leaf += 0.6; // a little extra room between separate subtrees
+    place(r.id, 0);
+  });
 
   const positioned: PositionedEdge[] = edges.map((e) => {
     const a = pos.get(e.from)!;

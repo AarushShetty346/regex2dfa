@@ -13,7 +13,7 @@ OUT = sys.argv[2]
 REGEXES = ['a', 'ab', 'a|b', 'a*', '(a|b)*', 'a(b|c)*', '(a|b)*abb', 'a(b|c)*d+', '(0|1(01*0)*1)*', '(ab|ba)?c*', '(a|ε)b+a?', 'a\\*b']
 INVALID = ['', '(a', 'a|', '*a', ')', 'a\\', '(a|b', 'a||b']
 STRINGS = ['', 'a', 'aaa', 'b', 'ab', 'abb', 'babb', 'abc', 'ba', 'bd', 'acd', 'c', '0110', 'x']
-STAGES = ['Syntax tree', 'followpos', 'DFA', 'Test strings']
+STAGES = ['Syntax tree', 'firstpos & lastpos', 'followpos', 'DFA', 'Test strings']
 
 GRAPH_JS = r"""() => [...document.querySelectorAll('main svg[role=img]')].filter(s => !s.closest('.hero-demo, [data-demo]')).map(svg => ({
   nodes: [...svg.querySelectorAll('[data-node]')].map(g => {
@@ -69,7 +69,7 @@ def main():
         for rx in REGEXES:
             set_regex(pg, rx)
             entry = {}
-            for st in STAGES[:4]:
+            for st in STAGES[:5]:
                 stage_button(pg, st).click()
                 pg.wait_for_timeout(120)
                 entry[st] = {'steps': scrub_values(pg)}
