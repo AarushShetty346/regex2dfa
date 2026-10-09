@@ -4,7 +4,7 @@ import { Badge } from '../../ui/primitives';
 import { Reveal, SplitHeading } from '../../ui/bits/motion';
 import SpotlightCard from '../../ui/bits/SpotlightCard';
 import { TopicIcon } from '../../ui/TopicIcon';
-import LiveDemo from './LiveDemo';
+import heroPhoto from '../../assets/hero-photo.jpg';
 
 export default function HomePage() {
   const modules = TOPICS.filter((t) => t.id !== 'home');
@@ -28,7 +28,15 @@ export default function HomePage() {
           </Reveal>
         </div>
         <Reveal className="hero-demo" delay={0.15} distance={20}>
-          <LiveDemo />
+          <figure className="demo hero-photo">
+            <img
+              src={heroPhoto}
+              alt="The Regex to DFA home page open on a laptop, showing the DFA for (a|b)*abb"
+              width={1600}
+              height={1200}
+              decoding="async"
+            />
+          </figure>
         </Reveal>
       </section>
 
