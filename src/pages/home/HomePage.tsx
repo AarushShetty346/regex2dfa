@@ -4,7 +4,7 @@ import { Badge } from '../../ui/primitives';
 import { Reveal, SplitHeading } from '../../ui/bits/motion';
 import SpotlightCard from '../../ui/bits/SpotlightCard';
 import { TopicIcon } from '../../ui/TopicIcon';
-import heroPhoto from '../../assets/hero-photo.jpg';
+import heroDfa from '../../assets/hero-dfa.png';
 
 export default function HomePage() {
   const modules = TOPICS.filter((t) => t.id !== 'home');
@@ -28,12 +28,12 @@ export default function HomePage() {
           </Reveal>
         </div>
         <Reveal className="hero-demo" delay={0.15} distance={20}>
-          <figure className="demo hero-photo">
+          <figure className="demo hero-still">
             <img
-              src={heroPhoto}
-              alt="The Regex to DFA home page open on a laptop, showing the DFA for (a|b)*abb"
-              width={1600}
-              height={1200}
+              src={heroDfa}
+              alt="DFA for (a|b)*abb after reading babb: states A to D, ending in accepting state D"
+              width={1328}
+              height={872}
               decoding="async"
             />
           </figure>
