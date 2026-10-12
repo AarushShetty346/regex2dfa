@@ -27,7 +27,7 @@ jobs:
           touch .nojekyll
           git init -q -b gh-pages
           git config user.name "Aarush Shetty"
-          git config user.email aarushshetty3@gmail.com
+          git config user.email 182738217+AarushShetty346@users.noreply.github.com
           git add -A
           git commit -q -m "Deploy ${GITHUB_SHA::7}"
           git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
