@@ -182,11 +182,12 @@ export default function RegexPage({ params }: { params?: URLSearchParams }) {
 function ErrorPointer({ src, position }: { src: string; position: number }) {
   // `position` is a string index, so slice the string rather than its code points.
   const at = Math.min(position, src.length);
+  const ch = at < src.length ? String.fromCodePoint(src.codePointAt(at)!) : '';
   return (
     <p className="error-pointer mono" aria-hidden>
       {src.slice(0, at)}
-      {at < src.length ? <mark>{src[at]}</mark> : <mark className="is-caret">▏</mark>}
-      {src.slice(at + 1)}
+      {ch ? <mark>{ch}</mark> : <mark className="is-caret">▏</mark>}
+      {src.slice(at + ch.length)}
     </p>
   );
 }
