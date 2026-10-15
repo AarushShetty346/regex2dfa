@@ -49,14 +49,21 @@ type Token =
 
 function tokenize(input: string): Token[] {
   const tokens: Token[] = [];
+  // Read whole code points, so a symbol outside the BMP (such as an emoji) stays one symbol.
+  // `pos` stays a UTF-16 index into `input`, which is what error messages slice by.
+  const charAt = (i: number) => {
+    const cp = input.codePointAt(i);
+    return cp === undefined ? undefined : String.fromCodePoint(cp);
+  };
   for (let i = 0; i < input.length; i++) {
-    const c = input[i];
+    const c = charAt(i)!;
+    if (c.length === 2) i++;
     if (/\s/.test(c)) continue;
     if (c === '\\') {
-      const next = input[i + 1];
+      const next = charAt(i + 1);
       if (next === undefined) throw new RegexSyntaxError('Trailing backslash: escape what?', i);
       tokens.push(next === 'e' ? { type: 'epsilon', pos: i } : { type: 'symbol', value: next, pos: i });
-      i++;
+      i += next.length;
     } else if (c === EPSILON) {
       tokens.push({ type: 'epsilon', pos: i });
     } else if (OPERATORS.has(c)) {

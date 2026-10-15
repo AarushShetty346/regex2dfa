@@ -56,6 +56,16 @@ describe('parseRegex', () => {
     expect(parseRegex('\\*')).toMatchObject({ kind: 'symbol', symbol: '*' });
   });
 
+  it('keeps a symbol outside the BMP (an emoji) as one symbol', () => {
+    const p = regexPipeline('😀+(x|\\🎉)');
+    expect(p.alphabet).toEqual(['x', '🎉', '😀'].sort());
+    expect(p.direct.positions.map((q) => q.symbol)).toEqual(['😀', 'x', '🎉', '#']);
+    expect(simulate(p.direct.dfa, '😀😀x').accepted).toBe(true);
+    expect(simulate(p.direct.dfa, '😀🎉').accepted).toBe(true);
+    expect(simulate(p.direct.dfa, '🎉').accepted).toBe(false);
+    expect(() => parseRegex('😀(')).toThrow(RegexSyntaxError);
+  });
+
   it.each([
     ['', 0],
     ['(ab', 3],
